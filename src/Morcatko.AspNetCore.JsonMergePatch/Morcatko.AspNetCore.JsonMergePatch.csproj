@@ -3,7 +3,15 @@
 	<PropertyGroup>
 		<TargetFrameworks>netstandard1.6</TargetFrameworks>
 		<AssemblyName>Morcatko.AspNetCore.JsonMergePatch</AssemblyName>
+		
 		<PackageId>Morcatko.AspNetCore.JsonMergePatch</PackageId>
+		<PackageVersion>1.0.0-alpha01</PackageVersion>
+		<Authors>Ondrej Morsky</Authors>
+		<Description>JSON Merge Patch support for ASP.NET Core 1.x</Description>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageReleaseNotes>Prerelease</PackageReleaseNotes>
+		<Copyright>Copyright 2017 (c). All rights reserved.</Copyright>
+		<PackageTags>ASP.NET Core JSON Merge Patch</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
