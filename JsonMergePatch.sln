@@ -11,7 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8B21863B-3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Morcatko.AspNetCore.JsonMergePatch", "src\Morcatko.AspNetCore.JsonMergePatch\Morcatko.AspNetCore.JsonMergePatch.csproj", "{A8BB3010-1E76-4C1E-8D99-3EE46341ED42}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testApp", "test\testApp\testApp.csproj", "{6D906577-DB58-4634-AB39-A663B7E25F45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testApp1.0", "test\testApp1.0\testApp1.0.csproj", "{BB21FEAC-A7E3-4856-816C-3F8BDABA7F9E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testApp1.1", "test\testApp1.1\testApp1.1.csproj", "{E8988AB2-6A4F-4A10-8B2C-7F6CE841E436}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,16 +25,21 @@ Global
 		{A8BB3010-1E76-4C1E-8D99-3EE46341ED42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8BB3010-1E76-4C1E-8D99-3EE46341ED42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8BB3010-1E76-4C1E-8D99-3EE46341ED42}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D906577-DB58-4634-AB39-A663B7E25F45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D906577-DB58-4634-AB39-A663B7E25F45}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D906577-DB58-4634-AB39-A663B7E25F45}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D906577-DB58-4634-AB39-A663B7E25F45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB21FEAC-A7E3-4856-816C-3F8BDABA7F9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB21FEAC-A7E3-4856-816C-3F8BDABA7F9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB21FEAC-A7E3-4856-816C-3F8BDABA7F9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB21FEAC-A7E3-4856-816C-3F8BDABA7F9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8988AB2-6A4F-4A10-8B2C-7F6CE841E436}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8988AB2-6A4F-4A10-8B2C-7F6CE841E436}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8988AB2-6A4F-4A10-8B2C-7F6CE841E436}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8988AB2-6A4F-4A10-8B2C-7F6CE841E436}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A8BB3010-1E76-4C1E-8D99-3EE46341ED42} = {A64B8040-7F6B-4061-B099-53954179C85A}
-		{6D906577-DB58-4634-AB39-A663B7E25F45} = {8B21863B-36B9-45A6-8D60-EC193239552B}
+		{BB21FEAC-A7E3-4856-816C-3F8BDABA7F9E} = {8B21863B-36B9-45A6-8D60-EC193239552B}
+		{E8988AB2-6A4F-4A10-8B2C-7F6CE841E436} = {8B21863B-36B9-45A6-8D60-EC193239552B}
 	EndGlobalSection
 EndGlobal

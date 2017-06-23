@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFrameworks>netcoreapp1.0</TargetFrameworks>
+		<RootNamespace>testApp</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
