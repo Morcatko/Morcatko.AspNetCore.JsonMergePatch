@@ -1,22 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A64B8040-7F6B-4061-B099-53954179C85A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ED9B14F4-1239-4248-AE8D-5E1BFE968B96}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Morcatko.AspNetCore.JsonMergePatch", "src\Morcatko.AspNetCore.JsonMergePatch\Morcatko.AspNetCore.JsonMergePatch.xproj", "{A8BB3010-1E76-4C1E-8D99-3EE46341ED42}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8B21863B-36B9-45A6-8D60-EC193239552B}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "testApp", "test\testApp\testApp.xproj", "{6D906577-DB58-4634-AB39-A663B7E25F45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Morcatko.AspNetCore.JsonMergePatch", "src\Morcatko.AspNetCore.JsonMergePatch\Morcatko.AspNetCore.JsonMergePatch.csproj", "{A8BB3010-1E76-4C1E-8D99-3EE46341ED42}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Morcatko.AspNetCore.JsonMergePatch.Test", "test\Morcatko.AspNetCore.JsonMergePatch.Test\Morcatko.AspNetCore.JsonMergePatch.Test.xproj", "{724CFAD8-4564-4371-86EE-7B9808C8B52C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testApp", "test\testApp\testApp.csproj", "{6D906577-DB58-4634-AB39-A663B7E25F45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,10 +27,6 @@ Global
 		{6D906577-DB58-4634-AB39-A663B7E25F45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D906577-DB58-4634-AB39-A663B7E25F45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D906577-DB58-4634-AB39-A663B7E25F45}.Release|Any CPU.Build.0 = Release|Any CPU
-		{724CFAD8-4564-4371-86EE-7B9808C8B52C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{724CFAD8-4564-4371-86EE-7B9808C8B52C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{724CFAD8-4564-4371-86EE-7B9808C8B52C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{724CFAD8-4564-4371-86EE-7B9808C8B52C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +34,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{A8BB3010-1E76-4C1E-8D99-3EE46341ED42} = {A64B8040-7F6B-4061-B099-53954179C85A}
 		{6D906577-DB58-4634-AB39-A663B7E25F45} = {8B21863B-36B9-45A6-8D60-EC193239552B}
-		{724CFAD8-4564-4371-86EE-7B9808C8B52C} = {8B21863B-36B9-45A6-8D60-EC193239552B}
 	EndGlobalSection
 EndGlobal
