@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.JsonPatch.Operations;
+﻿using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Formatters.Json.Internal;
 using Microsoft.Extensions.Logging;
@@ -15,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 {
-	internal class JsonMergePatchInputFormatter : JsonInputFormatter
+    internal class JsonMergePatchInputFormatter : JsonInputFormatter
 	{
 		private static readonly MediaTypeHeaderValue JsonMergePatchMediaType = MediaTypeHeaderValue.Parse(JsonMergePatchDocument.ContentType).CopyAsReadOnly();
 
@@ -96,5 +95,5 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 #warning Add support for non-generic type
 			return (context.ModelType.GetGenericTypeDefinition() == typeof(JsonMergePatchDocument<>));
 		}
-	}
+    }
 }

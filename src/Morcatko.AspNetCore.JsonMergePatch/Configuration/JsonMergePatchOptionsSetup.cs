@@ -51,7 +51,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Configuration
 		public void Configure(MvcOptions options)
 		{
 			var jsonMergePatchLogger = _loggerFactory.CreateLogger<JsonMergePatchInputFormatter>();
-			options.InputFormatters.Add(new JsonMergePatchInputFormatter(
+			options.InputFormatters.Insert(0, new JsonMergePatchInputFormatter(
 				jsonMergePatchLogger,
 				_jsonSerializerSettings,
 				_charPool,
