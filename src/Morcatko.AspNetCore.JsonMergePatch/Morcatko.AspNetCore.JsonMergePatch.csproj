@@ -5,7 +5,7 @@
 		<AssemblyName>Morcatko.AspNetCore.JsonMergePatch</AssemblyName>
 		
 		<PackageId>Morcatko.AspNetCore.JsonMergePatch</PackageId>
-		<PackageVersion>2.0.0-alpha01</PackageVersion>
+		<PackageVersion>2.0.0-alpha02</PackageVersion>
 		<Authors>Ondrej Morsky</Authors>
 		<Description>JSON Merge Patch support for ASP.NET Core 2.0</Description>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
