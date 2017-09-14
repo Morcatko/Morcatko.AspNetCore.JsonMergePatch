@@ -92,8 +92,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 				throw new ArgumentNullException(nameof(context));
 			}
 
+            var modelType = context.ModelType;
 #warning Add support for non-generic type
-			return (context.ModelType.GetGenericTypeDefinition() == typeof(JsonMergePatchDocument<>));
+			return (modelType.IsGenericType && (modelType.GetGenericTypeDefinition() == typeof(JsonMergePatchDocument<>)));
 		}
     }
 }
