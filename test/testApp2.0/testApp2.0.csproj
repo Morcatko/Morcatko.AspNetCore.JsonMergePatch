@@ -6,12 +6,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Morcatko.AspNetCore.JsonMergePatch.Tests\Server\DataController.cs" Link="Server\DataController.cs" />
+    <Compile Include="..\Morcatko.AspNetCore.JsonMergePatch.Tests\Server\Repository.cs" Link="Server\Repository.cs" />
+    <Compile Include="..\Morcatko.AspNetCore.JsonMergePatch.Tests\Server\TestModel.cs" Link="Server\TestModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Morcatko.AspNetCore.JsonMergePatch\Morcatko.AspNetCore.JsonMergePatch.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Server\" />
   </ItemGroup>
 
 </Project>

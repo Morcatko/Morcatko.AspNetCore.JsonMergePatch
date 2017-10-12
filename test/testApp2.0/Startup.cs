@@ -2,25 +2,28 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Morcatko.AspNetCore.JsonMergePatch;
+using Morcatko.AspNetCore.JsonMergePatch.Tests.Server;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace testApp
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services
+                .AddMvc();
             services.AddJsonMergePatch();
+
+            services.AddSingleton<IRepository, Repository>();
+
             services.AddSwaggerGen(c =>
             {
+                c.OperationFilter<JsonMergePatchDocumentOperationFilter>();
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseSwagger();

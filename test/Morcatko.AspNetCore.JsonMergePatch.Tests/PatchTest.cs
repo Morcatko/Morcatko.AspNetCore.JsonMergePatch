@@ -1,5 +1,4 @@
 using Morcatko.AspNetCore.JsonMergePatch.Tests.Server;
-using Morcatko.AspNetCore.JsonMergePatch.Tests.Server.Models;
 using System.Threading.Tasks;
 using Xunit;
 

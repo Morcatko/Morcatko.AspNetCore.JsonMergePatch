@@ -1,12 +1,9 @@
-﻿using System;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
-using Microsoft.AspNetCore.JsonPatch;
 
 namespace Morcatko.AspNetCore.JsonMergePatch
 {
-	public abstract class JsonMergePatchDocument
+    public abstract class JsonMergePatchDocument
 	{
 		public const string ContentType = "application/merge-patch+json";
 		public abstract void AddOperation(OperationType operationType, string path, object value);

@@ -2,10 +2,11 @@
 using System;
 using System.Linq;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server.Models
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
 {
     public class TestModel : IEquatable<TestModel>
     {
+        public int Id { get; set; }
         public int Integer { get; set; }
         public string String { get; set; }
         public float Float { get; set; }
@@ -18,6 +19,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server.Models
 
         public bool Equals(TestModel other)
         {
+            //We are not comparing Id
             return this.Integer == other.Integer
                 && this.String == other.String
                 && this.Float == other.Float

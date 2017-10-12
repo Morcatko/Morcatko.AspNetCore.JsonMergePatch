@@ -1,5 +1,4 @@
-﻿using Morcatko.AspNetCore.JsonMergePatch.Tests.Server.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
 {
