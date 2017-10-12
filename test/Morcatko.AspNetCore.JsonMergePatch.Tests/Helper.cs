@@ -33,7 +33,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
         public static Task PostAsync(this HttpClient client, string uri, object model) => client.PostAsync(uri, JsonContent(model));
         public static async Task<T> GetAsync<T>(this HttpClient client, string uri)
         {
-            var result = await client.GetStringAsync("api/data/0");
+            var result = await client.GetStringAsync(uri);
             return JsonConvert.DeserializeObject<T>(result);
         }
     }
