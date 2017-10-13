@@ -14,6 +14,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
                 Float = 1.5f,
                 Boolean = false,
                 Renamed = "some string",
+                SimpleEnum = SimpleEnum.two,
+                ValueEnum = ValueEnum.i,
                 SubModel = new SubModel()
                 {
                     Value1 = "value 1",
@@ -37,6 +39,43 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 
                 var expected = GetTestModel();
                 expected.Integer = 8;
+                Assert.Equal(expected, patchedModel);
+            }
+        }
+
+        [Fact]
+        public async Task PatchSimpleEnum()
+        {
+            using (var server = Helper.CreateServer())
+            using (var client = server.CreateClient())
+            {
+                await client.PostAsync("api/data/0", GetTestModel());
+
+                await server.PatchAsync("api/data/0", new { simpleEnum = "one" });
+
+                var patchedModel = await client.GetAsync<TestModel>("api/data/0");
+
+                var expected = GetTestModel();
+                expected.SimpleEnum = SimpleEnum.one;
+                Assert.Equal(expected, patchedModel);
+            }
+        }
+
+        [Fact]
+#warning this test fails - Need to fix somehow
+        public async Task PatchValueEnum()
+        {
+            using (var server = Helper.CreateServer())
+            using (var client = server.CreateClient())
+            {
+                await client.PostAsync("api/data/0", GetTestModel());
+
+                await server.PatchAsync("api/data/0", new { valueEnum = "Feet" });
+
+                var patchedModel = await client.GetAsync<TestModel>("api/data/0");
+
+                var expected = GetTestModel();
+                expected.ValueEnum = ValueEnum.ft;
                 Assert.Equal(expected, patchedModel);
             }
         }

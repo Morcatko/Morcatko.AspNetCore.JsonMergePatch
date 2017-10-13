@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
 {
@@ -16,6 +17,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
         public string Renamed { get; set; }
         public SubModel SubModel { get; set; }
 
+        public SimpleEnum SimpleEnum { get; set; }
+        public ValueEnum ValueEnum { get; set; }
 
         public bool Equals(TestModel other)
         {
@@ -25,6 +28,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
                 && this.Float == other.Float
                 && this.Boolean == other.Boolean
                 && this.Renamed == other.Renamed
+                && this.SimpleEnum == other.SimpleEnum
+                && this.ValueEnum == other.ValueEnum
                 && ((this.SubModel == other.SubModel)
                     || this.SubModel.Equals(other.SubModel));
         }
@@ -43,5 +48,22 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
                 && ((this.Numbers == other.Numbers)
                     || Enumerable.SequenceEqual(this.Numbers, other.Numbers));
         }
+    }
+
+    public enum SimpleEnum
+    {
+        zero = 0,
+        one = 1,
+        two = 2
+    }
+
+    public enum ValueEnum
+    {
+        [EnumMember(Value = "Meter")]
+        m,
+        [EnumMember(Value = "Feet")]
+        ft,
+        [EnumMember(Value = "Inch")]
+        i
     }
 }
