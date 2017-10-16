@@ -33,9 +33,24 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
             {
                 await client.PostAsync("api/data/0", GetTestModel());
 
-                await server.PatchAsync("api/data/0", new { integer = 8 });
+                var patchedModel = await server.PatchAsync<TestModel>("api/data/0", new { integer = 8 });
 
-                var patchedModel = await client.GetAsync<TestModel>("api/data/0");
+                var expected = GetTestModel();
+                expected.Integer = 8;
+                Assert.Equal(expected, patchedModel);
+            }
+        }
+
+        [Fact]
+#warning this test fails - Need to fix somehow
+        public async Task MissingReuqiredProperty()
+        {
+            using (var server = Helper.CreateServer())
+            using (var client = server.CreateClient())
+            {
+                await client.PostAsync("api/data/0", GetTestModel());
+
+                var patchedModel = await server.PatchAsync<TestModel>("api/data/0/validate", new { integer = 8 });
 
                 var expected = GetTestModel();
                 expected.Integer = 8;
@@ -51,9 +66,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
             {
                 await client.PostAsync("api/data/0", GetTestModel());
 
-                await server.PatchAsync("api/data/0", new { simpleEnum = "one" });
-
-                var patchedModel = await client.GetAsync<TestModel>("api/data/0");
+                var patchedModel = await server.PatchAsync<TestModel>("api/data/0", new { simpleEnum = "one" });
 
                 var expected = GetTestModel();
                 expected.SimpleEnum = SimpleEnum.one;
@@ -70,9 +83,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
             {
                 await client.PostAsync("api/data/0", GetTestModel());
 
-                await server.PatchAsync("api/data/0", new { valueEnum = "Feet" });
-
-                var patchedModel = await client.GetAsync<TestModel>("api/data/0");
+                var patchedModel = await server.PatchAsync<TestModel>("api/data/0", new { valueEnum = "Feet" });
 
                 var expected = GetTestModel();
                 expected.ValueEnum = ValueEnum.ft;
@@ -88,9 +99,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
             {
                 await client.PostAsync("api/data/0", GetTestModel());
 
-                await server.PatchAsync("api/data/0", new { subModel = new { value1 = "new value 1" } });
-
-                var patchedModel = await client.GetAsync<TestModel>("api/data/0");
+                var patchedModel = await server.PatchAsync<TestModel>("api/data/0", new { subModel = new { value1 = "new value 1" } });
 
                 var expected = GetTestModel();
                 expected.SubModel.Value1 = "new value 1";
@@ -106,9 +115,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
             {
                 await client.PostAsync("api/data/0", GetTestModel());
 
-                await server.PatchAsync("api/data/0", new { subModel = new SubModel() { Value1 = "All others are null" }});
-
-                var patchedModel = await client.GetAsync<TestModel>("api/data/0");
+                var patchedModel = await server.PatchAsync<TestModel>("api/data/0", new { subModel = new SubModel() { Value1 = "All others are null" } });
 
                 var expected = GetTestModel();
                 expected.SubModel = new SubModel() { Value1 = "All others are null" };
@@ -124,9 +131,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
             {
                 await client.PostAsync("api/data/0", GetTestModel());
 
-                await server.PatchAsync("api/data/0", new { subModel = null as SubModel });
-
-                var patchedModel = await client.GetAsync<TestModel>("api/data/0");
+                var patchedModel = await server.PatchAsync<TestModel>("api/data/0", new { subModel = null as SubModel });
 
                 var expected = GetTestModel();
                 expected.SubModel = null;

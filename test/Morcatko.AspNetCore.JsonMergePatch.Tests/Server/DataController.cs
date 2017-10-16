@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
 {
     [Route("api/[controller]")]
-    public class DataController
+    public class DataController : Controller
     {
         private readonly IRepository _repository;
 
@@ -39,6 +40,17 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
             _repository[id] = model;
             model.Id = id;
             return model;
+        }
+
+        [HttpPatch]
+        [Route("{id}/validate")]
+        [Consumes(JsonMergePatchDocument.ContentType)]
+        public TestModel PatchWithModelValidation(int id, [FromBody] JsonMergePatchDocument<TestModel> patch)
+        {
+            if (!ModelState.IsValid)
+                throw new ArgumentException("Model is invalid");
+
+            return Patch(id, patch);
         }
 
         [HttpPatch]

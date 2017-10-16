@@ -27,6 +27,12 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
             return requestBuilder.SendAsync("PATCH");
         }
 
+        public static async Task<T> PatchAsync<T>(this TestServer server, string uri, object content)
+        {
+            var response = await PatchAsync(server, uri, content);
+            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+        }
+
         public static Task PostAsync(this HttpClient client, string uri, object model) => client.PostAsync(uri, JsonContent(model));
         public static async Task<T> GetAsync<T>(this HttpClient client, string uri)
         {

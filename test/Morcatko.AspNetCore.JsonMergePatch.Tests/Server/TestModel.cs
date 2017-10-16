@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -9,6 +10,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
     {
         public int Id { get; set; }
         public int Integer { get; set; }
+        [Required]
         public string String { get; set; }
         public float Float { get; set; }
         public bool Boolean { get; set; }
