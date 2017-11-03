@@ -31,18 +31,20 @@ resulting C# object:
 See testApp2.0 for sample
 
 1. Install [Morcatko.AspNetCore.JsonMergePatch](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch) nuget
-2. Startup class
+2. Add to your startup class
 ```
 using Morcatko.AspNetCore.JsonMergePatch;
 
 public void ConfigureServices(IServiceCollection services)
 {
     ...
-    services.AddJsonMergePatch();
+    services
+        .AddMvc()
+        .AddJsonMergePatch();
     ...
 }
 ```
-3. Controller
+3. Use in your controller
 ```
 using Morcatko.AspNetCore.JsonMergePatch;
 
@@ -56,5 +58,15 @@ public void Patch([FromBody] JsonMergePatchDocument<Model> patch)
 }
 ```
 
-### Warning
-There are no tests in this project. Feeld free to add it, or completely takeover the project
+4. Swagger config (optional)
+```
+services.AddSwaggerGen(c =>
+    {
+        c.OperationFilter<JsonMergePatchDocumentOperationFilter>();
+    });
+```
+copy & paste this class into your app - https://github.com/Morcatko/Morcatko.AspNetCore.JsonMergePatch/blob/master/test/testApp2.0/JsonMergePatchDocumentOperationFilter.cs
+
+### Known issues/Not working
+- ModelState.IsValid is false when a required property is missing
+- Enums with [EnumMember(Value = "....")] attribute

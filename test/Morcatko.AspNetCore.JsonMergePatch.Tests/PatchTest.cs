@@ -43,7 +43,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 
         [Fact]
 #warning this test fails - Need to fix somehow
-        public async Task MissingReuqiredProperty()
+        public async Task MissingRequiredProperty()
         {
             using (var server = Helper.CreateServer())
             using (var client = server.CreateClient())

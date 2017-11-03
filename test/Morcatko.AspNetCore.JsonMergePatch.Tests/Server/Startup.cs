@@ -8,8 +8,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-            services.AddJsonMergePatch();
+            services
+                .AddMvc()
+                .AddJsonMergePatch();
             services.AddSingleton<IRepository, Repository>();
         }
 

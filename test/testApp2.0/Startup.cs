@@ -12,8 +12,8 @@ namespace testApp
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddMvc();
-            services.AddJsonMergePatch();
+                .AddMvc()
+                .AddJsonMergePatch();
 
             services.AddSingleton<IRepository, Repository>();
 
