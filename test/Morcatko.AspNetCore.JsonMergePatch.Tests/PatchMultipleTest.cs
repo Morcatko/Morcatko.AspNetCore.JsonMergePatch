@@ -27,28 +27,27 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
         public async Task PatchIntegers()
         {
             using (var server = Helper.CreateServer())
-            using (var client = server.CreateClient())
             {
-                await client.PostAsync("api/data/0", GetTestModel());
-                await client.PostAsync("api/data/1", GetTestModel());
-                await client.PostAsync("api/data/2", GetTestModel());
+                await server.PostAsync("api/data/0", GetTestModel());
+                await server.PostAsync("api/data/1", GetTestModel());
+                await server.PostAsync("api/data/2", GetTestModel());
 
-                await server.PatchAsync("api/data", new[]
+                await server.MergePatchAsync("api/data", new[]
                 {
                     new { id = 1, integer = 7 },
                     new { id = 2, integer = 9 }
                 });
 
-                var patchedModel = await client.GetAsync<TestModel>("api/data/0");
+                var patchedModel = await server.GetAsync<TestModel>("api/data/0");
                 var expected = GetTestModel();
                 Assert.Equal(expected, patchedModel);
 
-                patchedModel = await client.GetAsync<TestModel>("api/data/1");
+                patchedModel = await server.GetAsync<TestModel>("api/data/1");
                 expected = GetTestModel();
                 expected.Integer = 7;
                 Assert.Equal(expected, patchedModel);
 
-                patchedModel = await client.GetAsync<TestModel>("api/data/2");
+                patchedModel = await server.GetAsync<TestModel>("api/data/2");
                 expected = GetTestModel();
                 expected.Integer = 9;
                 Assert.Equal(expected, patchedModel);

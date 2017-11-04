@@ -49,11 +49,12 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
             }
         }
 
-        private static JsonMergePatchDocument CreatePatchDocument(JsonSerializer jsonSerializer, Type jsonMergePatchType, Type modelType, JObject jObject)
+        private JsonMergePatchDocument CreatePatchDocument(JsonSerializer jsonSerializer, Type jsonMergePatchType, Type modelType, JObject jObject)
         {
-            var model = jObject.ToObject(modelType, jsonSerializer);
+            var model = jsonSerializer.Deserialize(jObject.CreateReader(), modelType);//  jObject.ToObject(modelType, jsonSerializer);
             var jsonMergePatchDocument = (JsonMergePatchDocument)Activator.CreateInstance(jsonMergePatchType, model);
             AddOperation(jsonMergePatchDocument, "/", jObject);
+            jsonMergePatchDocument.ContractResolver = SerializerSettings.ContractResolver;
             return jsonMergePatchDocument;
         }
 

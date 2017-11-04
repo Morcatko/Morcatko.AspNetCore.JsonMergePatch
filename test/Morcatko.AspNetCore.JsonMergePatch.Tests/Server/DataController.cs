@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 
@@ -34,6 +35,18 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
         [Route("{id}")]
         [Consumes(JsonMergePatchDocument.ContentType)]
         public TestModel Patch(int id, [FromBody] JsonMergePatchDocument<TestModel> patch)
+        {
+            var model = _repository[id];
+            patch.ApplyTo(model);
+            _repository[id] = model;
+            model.Id = id;
+            return model;
+        }
+
+        [HttpPatch]
+        [Route("{id}")]
+        [Consumes("application/json-patch+json")]
+        public TestModel FullPatch(int id, [FromBody] JsonPatchDocument<TestModel> patch)
         {
             var model = _repository[id];
             patch.ApplyTo(model);

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
         public SubModel SubModel { get; set; }
 
         public SimpleEnum SimpleEnum { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
         public ValueEnum ValueEnum { get; set; }
 
         public bool Equals(TestModel other)

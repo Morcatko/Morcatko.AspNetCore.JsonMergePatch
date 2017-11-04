@@ -18,26 +18,15 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
         }
 
         public static HttpContent JsonContent(object data) => HttpContent(data, "application/json");
-        public static HttpContent PatchContent(object data) => HttpContent(data, JsonMergePatchDocument.ContentType);
+        public static HttpContent MergePatchContent(object data) => HttpContent(data, JsonMergePatchDocument.ContentType);
+        public static HttpContent JsonPatchContent(object data) => HttpContent(data, "application/json-patch+json");
 
-        public static Task<HttpResponseMessage> PatchAsync(this TestServer server, string uri, object content)
-        {
-            var requestBuilder = server.CreateRequest(uri);
-            requestBuilder.And(m => m.Content = Helper.PatchContent(content));
-            return requestBuilder.SendAsync("PATCH");
-        }
+        private static async Task<T> Parse<T>(Task<HttpResponseMessage> response) => JsonConvert.DeserializeObject<T>(await (await response).Content.ReadAsStringAsync());
 
-        public static async Task<T> PatchAsync<T>(this TestServer server, string uri, object content)
-        {
-            var response = await PatchAsync(server, uri, content);
-            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
-        }
-
-        public static Task PostAsync(this HttpClient client, string uri, object model) => client.PostAsync(uri, JsonContent(model));
-        public static async Task<T> GetAsync<T>(this HttpClient client, string uri)
-        {
-            var result = await client.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<T>(result);
-        }
+        public static Task<HttpResponseMessage> JsonPatchAsync(this TestServer server, string uri, object model) => server.CreateRequest(uri).And(r => r.Content = JsonPatchContent(model)).SendAsync("PATCH");
+        public static Task<HttpResponseMessage> MergePatchAsync(this TestServer server, string uri, object model) => server.CreateRequest(uri).And(r => r.Content = MergePatchContent(model)).SendAsync("PATCH");
+        public static Task<T> MergePatchAsync<T>(this TestServer server, string uri, object model) => Parse<T>(MergePatchAsync(server, uri, model));
+        public static Task<HttpResponseMessage> PostAsync(this TestServer server, string uri, object model) => server.CreateRequest(uri).And(r => r.Content = JsonContent(model)).SendAsync("POST");
+        public static Task<T> GetAsync<T>(this TestServer server, string uri) => Parse<T>(server.CreateRequest(uri).SendAsync("GET"));
     }
 }
