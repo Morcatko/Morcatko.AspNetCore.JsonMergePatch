@@ -17,6 +17,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 
         readonly JsonPatchDocument<TModel> _jsonPatchDocument = new JsonPatchDocument<TModel>();
 
+        public JsonPatchDocument<TModel> JsonPatchDocument { get => _jsonPatchDocument; }
+
         public override IContractResolver ContractResolver
         {
             get => _jsonPatchDocument.ContractResolver;
