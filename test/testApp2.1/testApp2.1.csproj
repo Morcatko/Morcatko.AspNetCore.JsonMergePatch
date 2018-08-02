@@ -5,6 +5,10 @@
     <RootNamespace>testApp</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp2.1\testApp2.1.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\Morcatko.AspNetCore.JsonMergePatch.Tests\Server\DataController.cs" Link="Server\DataController.cs" />
     <Compile Include="..\Morcatko.AspNetCore.JsonMergePatch.Tests\Server\Repository.cs" Link="Server\Repository.cs" />
