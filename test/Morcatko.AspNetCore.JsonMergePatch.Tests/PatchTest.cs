@@ -94,7 +94,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
             using (var server = Helper.CreateServer())
             {
                 await server.PostAsync("api/data/0", GetTestModel());
-                await server.JsonPatchAsync("api/data/0", new[] { new { op = "replace", path = "/valueEnum", value = "Feet" } });
+                await server.JsonPatchAsync("api/data/0/patch", new[] { new { op = "replace", path = "/valueEnum", value = "Feet" } });
             }
         }
 

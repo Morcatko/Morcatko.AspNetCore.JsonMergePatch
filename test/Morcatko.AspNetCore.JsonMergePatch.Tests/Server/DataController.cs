@@ -44,7 +44,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
         }
 
         [HttpPatch]
-        [Route("{id}")]
+        [Route("{id}/patch")] // Added patch to fix Swagger 2.0 conflict.
         [Consumes("application/json-patch+json")]
         public TestModel FullPatch(int id, [FromBody] JsonPatchDocument<TestModel> patch)
         {
