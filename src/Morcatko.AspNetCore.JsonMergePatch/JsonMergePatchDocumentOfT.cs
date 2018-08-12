@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
+using Morcatko.AspNetCore.JsonMergePatch.Builder;
 using Newtonsoft.Json.Serialization;
 
 namespace Morcatko.AspNetCore.JsonMergePatch
@@ -9,6 +10,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch
         public const string ContentType = "application/merge-patch+json";
         public abstract void AddOperation(OperationType operationType, string path, object value);
         public abstract IContractResolver ContractResolver { get; set; }
+
+        public static JsonMergePatchDocument<TModel> Build<TModel>(TModel original, TModel patched) where TModel : class
+            => PatchBuilder.Build(original, patched);
     }
 
     public class JsonMergePatchDocument<TModel> : JsonMergePatchDocument where TModel : class
