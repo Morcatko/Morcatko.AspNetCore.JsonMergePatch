@@ -5,43 +5,48 @@ using Newtonsoft.Json.Serialization;
 
 namespace Morcatko.AspNetCore.JsonMergePatch
 {
-    public abstract class JsonMergePatchDocument
-    {
-        public const string ContentType = "application/merge-patch+json";
-        public abstract void AddOperation(OperationType operationType, string path, object value);
-        public abstract IContractResolver ContractResolver { get; set; }
+	public abstract class JsonMergePatchDocument
+	{
+		public const string ContentType = "application/merge-patch+json";
+		internal abstract void AddPatch(string path, object value);
+		public abstract IContractResolver ContractResolver { get; set; }
 
-        public static JsonMergePatchDocument<TModel> Build<TModel>(TModel original, TModel patched) where TModel : class
-            => PatchBuilder.Build(original, patched);
-    }
+		//"patched" is full patched object, but it is only the diff-object when created from JSON/by InputFormatter
+		public static JsonMergePatchDocument<TModel> Build<TModel>(TModel original, TModel patched) where TModel : class
+			=> new PatchBuilder<TModel>().Build(original, patched);
+	}
 
-    public class JsonMergePatchDocument<TModel> : JsonMergePatchDocument where TModel : class
-    {
-        public TModel Model { get; }
+	public class JsonMergePatchDocument<TModel> : JsonMergePatchDocument where TModel : class
+	{
+		private static string replaceOp = OperationType.Replace.ToString();
 
-        readonly JsonPatchDocument<TModel> _jsonPatchDocument = new JsonPatchDocument<TModel>();
+		public TModel Model { get; internal set; }
 
-        public JsonPatchDocument<TModel> JsonPatchDocument { get => _jsonPatchDocument; }
+		private readonly JsonPatchDocument<TModel> _jsonPatchDocument = new JsonPatchDocument<TModel>();
 
-        public override IContractResolver ContractResolver
-        {
-            get => _jsonPatchDocument.ContractResolver;
-            set => _jsonPatchDocument.ContractResolver = value;
-        }
+		public JsonPatchDocument<TModel> JsonPatchDocument => _jsonPatchDocument;
 
-        public JsonMergePatchDocument(TModel model)
-        {
-            this.Model = model;
-        }
+		public override IContractResolver ContractResolver
+		{
+			get => _jsonPatchDocument.ContractResolver;
+			set => _jsonPatchDocument.ContractResolver = value;
+		}
 
-        public override void AddOperation(OperationType operationType, string path, object value)
-        {
-            _jsonPatchDocument.Operations.Add(new Operation<TModel>(operationType.ToString(), path, null, value));
-        }
+		public JsonMergePatchDocument() { }
+		internal JsonMergePatchDocument(TModel model)
+		{
+			this.Model = model;
+		}
 
-        public void ApplyTo(TModel objectToApplyTo)
-        {
-            _jsonPatchDocument.ApplyTo(objectToApplyTo);
-        }
-    }
+		internal override void AddPatch(string path, object value)
+		{
+			_jsonPatchDocument.Operations.Add(new Operation<TModel>(replaceOp, path, null, value));
+		}
+
+		public TModel ApplyTo(TModel objectToApplyTo)
+		{
+			_jsonPatchDocument.ApplyTo(objectToApplyTo);
+			return objectToApplyTo;
+		}
+	}
 }
