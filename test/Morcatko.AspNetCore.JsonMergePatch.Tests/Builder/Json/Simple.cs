@@ -1,4 +1,7 @@
-﻿using Xunit;
+﻿using Morcatko.AspNetCore.JsonMergePatch.Builder;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Xunit;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Json
 {
@@ -6,44 +9,46 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Json
 	{
 		class SimpleClass
 		{
+			[JsonProperty("Number")]
 			public int Integer { get; set; } = 1;
 			public string String { get; set; } = "abc";
 		}
 
-		[Fact]
-		public void NoChange()
-		{
-			var model = new SimpleClass();
-
-			var patch = JsonMergePatchDocument.Build<SimpleClass>("{ }");
-
-			Assert.Empty(patch.JsonPatchDocument.Operations);
-		}
+		private readonly PatchBuilder<SimpleClass> builder = new PatchBuilder<SimpleClass>();
 
 		[Fact]
-		public void ValueToValue()
+		public void String()
 		{
-			var model = new SimpleClass();
+			var original = new SimpleClass();
 
-			var patch = JsonMergePatchDocument.Build<SimpleClass>("{ integer: 3 }");
-			var result = patch.ApplyTo(model);
+			var patch = builder.Build("{ number: 3 }");
+			var result = patch.ApplyTo(original);
 
-			Assert.Single(patch.JsonPatchDocument.Operations);
 			Assert.Equal(3, result.Integer);
-			Assert.Equal("abc", result.String);
 		}
 
 		[Fact]
-		public void ValueToNull()
+		public void JObject()
 		{
-			var model = new SimpleClass();
+			var original = new SimpleClass();
 
-			var patch = JsonMergePatchDocument.Build<SimpleClass>("{ string: null }");
-			var result = patch.ApplyTo(model);
+			var patch = builder.Build(new JObject(new JProperty("number", 3)));
+			var result = patch.ApplyTo(original);
 
-			Assert.Single(patch.JsonPatchDocument.Operations);
-			Assert.Equal(1, result.Integer);
-			Assert.Null(result.String);
+			Assert.Equal(3, result.Integer);
+		}
+
+		[Fact]
+		public void Diff()
+		{
+			var original= new SimpleClass();
+			var patched = new SimpleClass();
+			patched.Integer = 3;
+
+			var patch = builder.Build(original, patched);
+			var result = patch.ApplyTo(original);
+
+			Assert.Equal(3, result.Integer);
 		}
 	}
 }

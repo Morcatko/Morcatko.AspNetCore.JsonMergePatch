@@ -1,6 +1,9 @@
+using Morcatko.AspNetCore.JsonMergePatch.Builders;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Diff
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builders.Diff
 {
 	public class Nested
 	{
@@ -18,6 +21,16 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Diff
 			public SimpleClass Object { get; set; } = new SimpleClass();
 		}
 
+		[Fact]
+		public void NoChange()
+		{
+			var source = new NestedObject();
+			var patched = new NestedObject();
+
+			var diff = DiffBuilder.Build(source, patched);
+
+			Assert.Null(diff);
+		}
 
 		[Fact]
 		public void RootOnly()
@@ -25,15 +38,11 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Diff
 			var source = new NestedObject();
 			var patched = new NestedObject() { Id = 9 };
 
-			var patch = JsonMergePatchDocument.Build(source, patched);
-			var result = patch.ApplyTo(source);
+			var diff = DiffBuilder.Build(source, patched);
 
-			Assert.Single(patch.JsonPatchDocument.Operations);
-			Assert.Equal(9, result.Id);
-			Assert.Equal(1, result.Object.Integer1);
-			Assert.Equal(2, result.Object.Integer2);
-			Assert.Null(result.Object.String1);
-			Assert.Equal("abcd", result.Object.String2);
+			Assert.True(JObject.DeepEquals(
+				 JObject.Parse("{Id: 9}"),
+				 diff));
 		}
 
 		[Fact]
@@ -43,15 +52,11 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Diff
 			var patched = new NestedObject();
 			patched.Object.Integer2 = 19;
 
-			var patch = JsonMergePatchDocument.Build(source, patched);
-			var result = patch.ApplyTo(source);
+			var diff = DiffBuilder.Build(source, patched);
 
-			Assert.Single(patch.JsonPatchDocument.Operations);
-			Assert.Equal(1, result.Id);
-			Assert.Equal(1, result.Object.Integer1);
-			Assert.Equal(19, result.Object.Integer2);
-			Assert.Null(result.Object.String1);
-			Assert.Equal("abcd", result.Object.String2);
+			Assert.True(JObject.DeepEquals(
+							 JObject.Parse("{Object:{Integer2: 19}}"),
+							 diff));
 		}
 
 		[Fact]
@@ -61,18 +66,14 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Diff
 			var patched = new NestedObject();
 			patched.Object = null;
 
-			var patch = JsonMergePatchDocument.Build(source, patched);
-			var result = patch.ApplyTo(source);
+			var diff = DiffBuilder.Build(source, patched);
 
-			Assert.Single(patch.JsonPatchDocument.Operations);
-			Assert.Equal(1, result.Id);
-			Assert.Null(result.Object);
+			Assert.True(JObject.DeepEquals(
+							 JObject.Parse("{Object:null}"),
+							 diff));
 		}
 
-		/*
-		
 		//Not supported in JsonPatchDocument
-		
 		[Fact]
 		public void NullToObject()
 		{
@@ -80,16 +81,11 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Diff
 			source.Object = null;
 			var patched = new NestedObject();
 
-			var patch = JsonMergePatchDocument.Build(source, patched);
-			var result = patch.ApplyTo(source);
+			var diff = DiffBuilder.Build(source, patched);
 
-			Assert.Single(patch.JsonPatchDocument.Operations);
-			Assert.Equal(1, result.Id);
-			Assert.Equal(1, result.Object.Integer1);
-			Assert.Equal(2, result.Object.Integer2);
-			Assert.Null(result.Object.String1);
-			Assert.Equal("abcd", result.Object.String2);
+			Assert.True(JObject.DeepEquals(
+							 JObject.Parse($"{{Object:{JsonConvert.SerializeObject(patched.Object)}}}"),
+							 diff));
 		}
-		*/
 	}
 }

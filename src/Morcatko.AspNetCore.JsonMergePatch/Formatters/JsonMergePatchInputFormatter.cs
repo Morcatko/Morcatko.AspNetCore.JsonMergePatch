@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Formatters.Json.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.Net.Http.Headers;
+using Morcatko.AspNetCore.JsonMergePatch.Builder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -10,7 +11,6 @@ using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,24 +36,10 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 		}
 
 		private static bool ContainerIsIEnumerable(InputFormatterContext context) => context.ModelType.IsGenericType && (context.ModelType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
-		private static void AddOperation(JsonMergePatchDocument jsonMergePatchDocument, string pathPrefix, JObject jObject)
-		{
-			foreach (var jProperty in jObject)
-			{
-				if (jProperty.Value is JValue)
-					jsonMergePatchDocument.AddPatch(pathPrefix + jProperty.Key, ((JValue)jProperty.Value).Value);
-				else if (jProperty.Value is JArray)
-					jsonMergePatchDocument.AddPatch(pathPrefix + jProperty.Key, ((JArray)jProperty.Value));
-				else if (jProperty.Value is JObject)
-					AddOperation(jsonMergePatchDocument, pathPrefix + jProperty.Key + "/", (jProperty.Value as JObject));
-			}
-		}
 
-		private JsonMergePatchDocument CreatePatchDocument(JsonSerializer jsonSerializer, Type jsonMergePatchType, Type modelType, JObject jObject)
+		private JsonMergePatchDocument CreatePatchDocument(Type jsonMergePatchType, Type modelType, JObject jObject, JsonSerializer jsonSerializer)
 		{
-			var model = jObject.ToObject(modelType, jsonSerializer);
-			var jsonMergePatchDocument = (JsonMergePatchDocument)Activator.CreateInstance(jsonMergePatchType, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { model }, null);
-			AddOperation(jsonMergePatchDocument, "/", jObject);
+			var jsonMergePatchDocument = PatchBuilder.CreatePatchDocument(jsonMergePatchType, modelType, jObject, jsonSerializer);
 			jsonMergePatchDocument.ContractResolver = SerializerSettings.ContractResolver;
 			return jsonMergePatchDocument;
 		}
@@ -92,7 +78,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 								if (container != null)
 									throw new ArgumentException("Received object when array was expected"); //This could be handled by returnin list with single item
 
-								var jsonMergePatchDocument = CreatePatchDocument(jsonSerializer, jsonMergePatchType, modelType, jObject);
+								var jsonMergePatchDocument = CreatePatchDocument(jsonMergePatchType, modelType, jObject, jsonSerializer);
 								return await InputFormatterResult.SuccessAsync(jsonMergePatchDocument);
 							case JArray jArray:
 								if (container == null)
@@ -100,7 +86,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 
 								foreach (var jObject in jArray.OfType<JObject>())
 								{
-									container.Add(CreatePatchDocument(jsonSerializer, jsonMergePatchType, modelType, jObject));
+									container.Add(CreatePatchDocument(jsonMergePatchType, modelType, jObject, jsonSerializer));
 								}
 								return await InputFormatterResult.SuccessAsync(container);
 						}
