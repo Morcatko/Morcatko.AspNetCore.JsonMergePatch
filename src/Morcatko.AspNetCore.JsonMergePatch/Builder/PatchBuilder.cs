@@ -7,24 +7,38 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Builder
 {
 	internal class PatchBuilder<TModel> where TModel : class
 	{
-		JsonMergePatchDocument<TModel> patchDocument;
-
 		public JsonMergePatchDocument<TModel> Build(TModel original, TModel patched)
 		{
-			this.patchDocument = new JsonMergePatchDocument<TModel>();
+			var patchDocument = new JsonMergePatchDocument<TModel>();
 			BuildObjectDiff(
-				this.patchDocument,
+				patchDocument,
 				string.Empty,
 				JObject.FromObject(original),
 				JObject.FromObject(patched));
 			return patchDocument;
 		}
 
+		public JsonMergePatchDocument<TModel> Build(JObject jsonObjectPatch)
+		{
+			var patchDocument = new JsonMergePatchDocument<TModel>(jsonObjectPatch.ToObject<TModel>());
+			BuildObjectDiff(
+				patchDocument,
+				string.Empty,
+				null,
+				jsonObjectPatch);
+			return patchDocument;
+		}
+
+		public JsonMergePatchDocument<TModel> Build(string jsonObject)
+			=> Build(JObject.Parse(jsonObject));
+
+
+
 		private static void BuildDiff(JsonMergePatchDocument<TModel> patchDocument, string propertyPath, JToken originalJToken, JToken patchedJToken)
 		{
 			if ((originalJToken is JArray) || (patchedJToken is JArray))
 				BuildArrayDiff(patchDocument, propertyPath, originalJToken as JArray, patchedJToken as JArray);
-			else
+			else if (originalJToken != null)
 			{
 				switch (originalJToken)
 				{
@@ -33,6 +47,20 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Builder
 						break;
 					case JObject originalObject:
 						BuildObjectDiff(patchDocument, propertyPath, originalObject, patchedJToken as JObject);
+						break;
+					default:
+						throw new NotImplementedException();
+				}
+			}
+			else
+			{
+				switch (patchedJToken)
+				{
+					case JValue patchedValue:
+						BuildValueDiff(patchDocument, propertyPath, JValue.CreateString(patchedValue.Value + "_dummy"), patchedValue);	//workaround when patchedValue is null
+						break;
+					case JObject patchedObject:
+						BuildObjectDiff(patchDocument, propertyPath, originalJToken as JObject, patchedObject);
 						break;
 					default:
 						throw new NotImplementedException();
@@ -48,11 +76,13 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Builder
 				return;
 			}
 
-			foreach (var property in original.Properties())
+			var properties = original?.Properties() ?? patched.Properties();
+
+			foreach (var property in properties)
 			{
 				var propertyName = property.Name;
 				var propertyPath = path + "/" + propertyName;
-				var originalJToken = original.GetValue(propertyName);
+				var originalJToken = original?.GetValue(propertyName);
 				var patchedJToken = patched.GetValue(propertyName);
 
 				BuildDiff(patchDocument, propertyPath, originalJToken, patchedJToken);
@@ -61,8 +91,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Builder
 
 		private static void BuildValueDiff(JsonMergePatchDocument<TModel> patchDocument, string path, JValue original, JValue patched)
 		{
-			if (((original.Value != null) && !original.Value.Equals(patched.Value))
-				|| (patched.Value != null) && !patched.Value.Equals(original.Value))
+			if (((original?.Value != null) && !original.Value.Equals(patched.Value))
+				|| (patched.Value != null) && !patched.Value.Equals(original?.Value))
 				patchDocument.AddPatch(path, patched.Value);
 		}
 

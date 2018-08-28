@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Diff
 {
 	public class Nested
 	{
