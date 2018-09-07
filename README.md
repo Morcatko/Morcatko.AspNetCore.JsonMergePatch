@@ -1,9 +1,10 @@
-# JSON Merge Patch support for ASP.NET Core 2.0
+# JSON Merge Patch support for ASP.NET Core 2.x
 
 ### JSON Merge Patch
 - [RFC 7396](https://tools.ietf.org/html/rfc7396)
 - performs partial resource update similar to JSON Patch
 - Supports Swagger
+- netstandard 2.0
 ```
 C# object:
 var backendModel = new Model()
@@ -59,13 +60,31 @@ public void Patch([FromBody] JsonMergePatchDocument<Model> patch)
 ```
 
 4. Swagger config (optional)
+
+copy & paste this class into your app - https://github.com/Morcatko/Morcatko.AspNetCore.JsonMergePatch/blob/master/test/testApp2.0/JsonMergePatchDocumentOperationFilter.cs
 ```
 services.AddSwaggerGen(c =>
     {
         c.OperationFilter<JsonMergePatchDocumentOperationFilter>();
     });
 ```
-copy & paste this class into your app - https://github.com/Morcatko/Morcatko.AspNetCore.JsonMergePatch/blob/master/test/testApp2.0/JsonMergePatchDocumentOperationFilter.cs
+
+### How to - unit testing
+See `Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Json.Simple` class for more examples
+```
+Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Json
+public void UnitTest()
+{
+    var model = new Model();
+    var patch1 = PatchBuidler.Build<Model>("{ integer: 1}");
+    ...
+    or
+    ...
+    var original = new Model();
+    var patched = new Model() { Integer = 1};
+    var patch2 = PatchBuilder.Build(original, patched);
+}
+```
 
 ### Known issues/Not working
 - ModelState.IsValid is false when a required property is missing
