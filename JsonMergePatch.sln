@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A64B8040-7F6B-4061-B099-53954179C85A}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testApp2.0", "test\testApp2.0\testApp2.0.csproj", "{5384A6E5-C38D-4C26-BB2F-446537C19422}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Morcatko.AspNetCore.JsonMergePatch.Tests", "test\Morcatko.AspNetCore.JsonMergePatch.Tests\Morcatko.AspNetCore.JsonMergePatch.Tests.csproj", "{2E200A89-ADB3-45FC-82E0-9EEA3225EDE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Morcatko.AspNetCore.JsonMergePatch.TestsMvcCore", "test\Morcatko.AspNetCore.JsonMergePatch.TestsMvcCore\Morcatko.AspNetCore.JsonMergePatch.TestsMvcCore.csproj", "{1B29A379-1EAC-4376-B882-FD77B4BF2678}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2E200A89-ADB3-45FC-82E0-9EEA3225EDE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E200A89-ADB3-45FC-82E0-9EEA3225EDE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E200A89-ADB3-45FC-82E0-9EEA3225EDE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B29A379-1EAC-4376-B882-FD77B4BF2678}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B29A379-1EAC-4376-B882-FD77B4BF2678}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B29A379-1EAC-4376-B882-FD77B4BF2678}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B29A379-1EAC-4376-B882-FD77B4BF2678}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +47,7 @@ Global
 		{A8BB3010-1E76-4C1E-8D99-3EE46341ED42} = {A64B8040-7F6B-4061-B099-53954179C85A}
 		{5384A6E5-C38D-4C26-BB2F-446537C19422} = {8B21863B-36B9-45A6-8D60-EC193239552B}
 		{2E200A89-ADB3-45FC-82E0-9EEA3225EDE5} = {8B21863B-36B9-45A6-8D60-EC193239552B}
+		{1B29A379-1EAC-4376-B882-FD77B4BF2678} = {8B21863B-36B9-45A6-8D60-EC193239552B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {835CDCD1-3A3F-4D33-9107-9F961EBDED17}

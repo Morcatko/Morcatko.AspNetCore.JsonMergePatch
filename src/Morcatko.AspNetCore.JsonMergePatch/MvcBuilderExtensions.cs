@@ -20,5 +20,11 @@ namespace Morcatko.AspNetCore.JsonMergePatch
             builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, JsonMergePatchOptionsSetup>());
             return builder;
         }
+
+	    public static IMvcCoreBuilder AddJsonMergePatch(this IMvcCoreBuilder builder)
+	    {
+	        builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, JsonMergePatchOptionsSetup>());
+	        return builder;
+	    }
     }
 }
