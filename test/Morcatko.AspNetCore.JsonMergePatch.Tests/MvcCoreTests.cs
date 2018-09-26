@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Morcatko.AspNetCore.JsonMergePatch.Tests.Server;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Xunit;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.TestsMvcCore
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 {
     public class MvcCoreStartup
     {
@@ -40,13 +41,14 @@ namespace Morcatko.AspNetCore.JsonMergePatch.TestsMvcCore
         [Fact]
         public async Task PatchIntegers()
         {
+
             using (var server = CreateServer())
             {
-                var response = await server.CreateClient().ClientPost("api/data/0", GetTestModel());
+                var response = await server.PostAsync("api/dataCore/0", GetTestModel());
                 response.EnsureSuccessStatusCode();
-                await server.MergePatchAsync("api/data/0", new { id = 0, integer = 7 });
+                await server.MergePatchAsync("api/dataCore/0", new { id = 0, integer = 7 });
 
-                var patchedModel = await server.GetAsync<TestModel>("api/data/0");
+                var patchedModel = await server.GetAsync<TestModel>("api/dataCore/0");
                 var expected = GetTestModel();
                 expected.Integer = 7;
                 Assert.Equal(expected, patchedModel);

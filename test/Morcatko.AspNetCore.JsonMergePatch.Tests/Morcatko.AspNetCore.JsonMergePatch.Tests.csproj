@@ -18,8 +18,4 @@
     <ProjectReference Include="..\..\src\Morcatko.AspNetCore.JsonMergePatch\Morcatko.AspNetCore.JsonMergePatch.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Builder\NewFolder\" />
-  </ItemGroup>
-
 </Project>

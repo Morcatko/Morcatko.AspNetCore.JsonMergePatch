@@ -6,6 +6,6 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
     public interface IRepository : IDictionary<int, TestModel>
     { }
 
-    public class Repository : Dictionary<int, TestModel>, IRepository
+    class Repository : Dictionary<int, TestModel>, IRepository
     { }
 }

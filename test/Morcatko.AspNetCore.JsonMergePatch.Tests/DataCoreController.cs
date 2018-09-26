@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Morcatko.AspNetCore.JsonMergePatch.Tests.Server;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.TestsMvcCore
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 {
     [Route("api/[controller]")]
-    public class DataController : ControllerBase
+    public class DataCoreController : ControllerBase
     {
         private readonly IRepository _repository;
 
-        public DataController(IRepository repository)
+        public DataCoreController(IRepository repository)
         {
             _repository = repository;
         }
