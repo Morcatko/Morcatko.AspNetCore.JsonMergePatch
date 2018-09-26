@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Morcatko.AspNetCore.JsonMergePatch.Tests.Server;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Xunit;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Tests
@@ -14,20 +12,16 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors().AddMvcCore().AddApplicationPart(typeof(DataController).Assembly)
-                .AddJsonFormatters(settings =>
-                {
-                    settings.Converters.Add(new StringEnumConverter { CamelCaseText = false });
-                    settings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-                })
-                .AddJsonMergePatch()
+            services
+                .AddMvcCore() // Do not add the full Mvc
+                .AddJsonFormatters() // required to have json input in [FromBody]
+                .AddJsonMergePatch() // Services to be tested ;)
                 ;
             services.AddSingleton<IRepository, Repository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {            
-            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod().AllowCredentials());
+        {
             app.UseMvc();
         }
     }
@@ -41,7 +35,6 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
         [Fact]
         public async Task PatchIntegers()
         {
-
             using (var server = CreateServer())
             {
                 var response = await server.PostAsync("api/dataCore/0", GetTestModel());
