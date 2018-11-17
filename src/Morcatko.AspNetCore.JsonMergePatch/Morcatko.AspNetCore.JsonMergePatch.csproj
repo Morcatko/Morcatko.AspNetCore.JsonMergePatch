@@ -5,13 +5,14 @@
     <AssemblyName>Morcatko.AspNetCore.JsonMergePatch</AssemblyName>
 
     <PackageId>Morcatko.AspNetCore.JsonMergePatch</PackageId>
-    <PackageVersion>2.0.0-beta03</PackageVersion>
+    <PackageVersion>2.0.$(VersionSuffix)</PackageVersion>
     <Authors>Ondrej Morsky</Authors>
-    <Description>JSON Merge Patch support for ASP.NET Core 2.0</Description>
+    <Description>JSON Merge Patch support for ASP.NET Core 2.X</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>Prerelease</PackageReleaseNotes>
     <Copyright>Copyright 2017 (c). All rights reserved.</Copyright>
     <PackageTags>ASP.NET Core JSON Merge Patch</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
     <!--Nuget source + SourceLink-->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

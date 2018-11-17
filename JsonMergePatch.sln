@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A64B8040-7F6B-4061-B099-53954179C85A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ED9B14F4-1239-4248-AE8D-5E1BFE968B96}"
+	ProjectSection(SolutionItems) = preProject
+		dotnet-pack.ps1 = dotnet-pack.ps1
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8B21863B-36B9-45A6-8D60-EC193239552B}"
 EndProject
