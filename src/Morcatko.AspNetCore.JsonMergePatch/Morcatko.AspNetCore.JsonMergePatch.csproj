@@ -10,7 +10,7 @@
     <Description>JSON Merge Patch support for ASP.NET Core 2.X</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>Prerelease</PackageReleaseNotes>
-    <Copyright>Copyright 2017 (c). All rights reserved.</Copyright>
+    <Copyright>Copyright 2018 (c). All rights reserved.</Copyright>
     <PackageTags>ASP.NET Core JSON Merge Patch</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
