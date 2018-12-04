@@ -75,7 +75,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch
                 var jsonContract = ContractResolver.ResolveContract(currentType);
                 if (jsonContract is JsonDictionaryContract jsonDictionaryContract)
                 {
-                    currentType = currentType.GetGenericArguments().Last();
+                    currentType = jsonDictionaryContract.DictionaryValueType;
                     continue;
                 }
                 var currentProperty = GetPropertyInfo(currentType, propertyName);
@@ -103,7 +103,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch
             object currentValue;
 
             var jsonContract = ContractResolver.ResolveContract(value.GetType());
-            if (jsonContract is JsonDictionaryContract jsonDictionaryContract)
+            if (jsonContract is JsonDictionaryContract)
             {
                 try
                 {
