@@ -71,8 +71,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
         }
 
         #region ValueEnum
-		[Fact(Skip = "Enums do not work - https://github.com/aspnet/Home/issues/2423")]
-		public async Task PatchValueEnum()
+        [Fact(Skip = "Enums do not work - https://github.com/aspnet/Home/issues/2423")]
+        public async Task PatchValueEnum()
         {
             using (var server = Helper.CreateServer())
             {
@@ -86,9 +86,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
             }
         }
 
-		[Fact(Skip = "JsonPatch (not merge) fails as well - https://github.com/aspnet/Home/issues/2423")]
-		public async Task JsonPatchValueEnum()
-        {   
+        [Fact(Skip = "JsonPatch (not merge) fails as well - https://github.com/aspnet/Home/issues/2423")]
+        public async Task JsonPatchValueEnum()
+        {
             using (var server = Helper.CreateServer())
             {
                 await server.PostAsync("api/data/0", GetTestModel());
@@ -117,6 +117,92 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 
                 var expected = GetTestModel();
                 expected.SubModel.Value1 = "new value 1";
+                Assert.Equal(expected, patchedModel);
+            }
+        }
+
+        [Fact]
+        public async Task PatchSubPropertyOfNotExistingObject()
+        {
+            using (var server = Helper.CreateServer())
+            {
+                var model = GetTestModel();
+                model.SubModel = null;
+                await server.PostAsync("api/data/0", model);
+
+                var patchedModel = await server.MergePatchAsync<TestModel>("api/data/0", new { subModel = new { value1 = "new value 1" } });
+
+                var expected = GetTestModel();
+                expected.SubModel = new SubModel() { Value1 = "new value 1" };
+                Assert.Equal(expected, patchedModel);
+            }
+        }
+
+
+        [Fact]
+        public async Task PatchTwoSubPropertiesOfNotExistingObject()
+        {
+            using (var server = Helper.CreateServer())
+            {
+                var model = GetTestModel();
+                model.SubModel = null;
+                await server.PostAsync("api/data/0", model);
+
+                var patchedModel = await server.MergePatchAsync<TestModel>("api/data/0", new { subModel = new { value1 = "new value 1", numbers = new[] { 1, 3 } } });
+
+                var expected = GetTestModel();
+                expected.SubModel = new SubModel() { Value1 = "new value 1", Numbers = new[] { 1, 3 } };
+                Assert.Equal(expected, patchedModel);
+            }
+        }
+
+        [Fact]
+        public async Task PatchAddAnObjectToANullProperty()
+        {
+            using (var server = Helper.CreateServer())
+            {
+                var model = GetTestModel();
+                model.SubModel = null;
+                await server.PostAsync("api/data/0", model);
+
+                var patchedModel = await server.MergePatchAsync<TestModel>("api/data/0", new { subModel = new { } });
+
+                var expected = GetTestModel();
+                expected.SubModel = new SubModel();
+                Assert.Equal(expected, patchedModel);
+            }
+        }
+
+        [Fact]
+        public async Task PatchSubSubObjectEmpty()
+        {
+            using (var server = Helper.CreateServer())
+            {
+                var model = GetTestModel();
+                model.SubModel = null;
+                await server.PostAsync("api/data/0", model);
+
+                var patchedModel = await server.MergePatchAsync<TestModel>("api/data/0", new { subModel = new { subSubModel = new { } } });
+
+                var expected = GetTestModel();
+                expected.SubModel = new SubModel { SubSubModel = new SubSubModel() };
+                Assert.Equal(expected, patchedModel);
+            }
+        }
+
+        [Fact]
+        public async Task PatchSubSubObjectProperty()
+        {
+            using (var server = Helper.CreateServer())
+            {
+                var model = GetTestModel();
+                model.SubModel = null;
+                await server.PostAsync("api/data/0", model);
+
+                var patchedModel = await server.MergePatchAsync<TestModel>("api/data/0", new { subModel = new { subSubModel = new { value1 = "new value 1" } } });
+
+                var expected = GetTestModel();
+                expected.SubModel = new SubModel { SubSubModel = new SubSubModel { Value1 = "new value 1" } };
                 Assert.Equal(expected, patchedModel);
             }
         }
