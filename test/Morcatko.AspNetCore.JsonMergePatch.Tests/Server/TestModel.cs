@@ -35,9 +35,13 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
                 && this.Renamed == other.Renamed
                 && this.SimpleEnum == other.SimpleEnum
                 && this.ValueEnum == other.ValueEnum
+                && Enumerable.SequenceEqual(this.SubModels?.Keys, other.SubModels?.Keys)
+                && Enumerable.SequenceEqual(this.SubModels?.Values, other.SubModels?.Values)
                 && ((this.SubModel == other.SubModel)
                     || this.SubModel.Equals(other.SubModel));
         }
+
+        public Dictionary<string, SubModel> SubModels {get;set;} = new Dictionary<string, SubModel>();
     }
 
     public class SubModel : IEquatable<SubModel>

@@ -4,6 +4,7 @@ using Morcatko.AspNetCore.JsonMergePatch.Builder;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -35,7 +36,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch
     {
         private static string replaceOp = OperationType.Replace.ToString();
         private static string addOp = OperationType.Add.ToString();
-        private static char[] pathSplitter = new []{'/'};
+        private static string removeOp = OperationType.Remove.ToString();
+        
+        private static char[] pathSplitter = new[] { '/' };
         private Type Type = typeof(TModel);
 
         public TModel Model { get; internal set; }
@@ -55,25 +58,30 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 
         internal override void AddPatch(string path, object value)
         {
-            JsonPatchDocument.Operations.Add(new Operation<TModel>(replaceOp, path, null, value));
+            JsonPatchDocument.Operations.Add(new Operation<TModel>(value == null ? removeOp :  replaceOp, path, null, value));
         }
 
         internal override void AddObject(string path)
         {
-            var property = this.RetrievePropertyInfoFromPath(Type, path);
-            JsonPatchDocument.Operations.Add(new Operation<TModel>(addOp, path, null, ContractResolver.ResolveContract(property.PropertyType).DefaultCreator()));
+            var propertyType = this.RetrievePropertyTypeFromPath(Type, path);
+            JsonPatchDocument.Operations.Add(new Operation<TModel>(addOp, path, null, ContractResolver.ResolveContract(propertyType).DefaultCreator()));
         }
 
-        private PropertyInfo RetrievePropertyInfoFromPath(Type type, string path)
+        private Type RetrievePropertyTypeFromPath(Type type, string path)
         {
             var currentType = type;
-            PropertyInfo currentProperty = null;
-            foreach(var propertyName in path.Split(pathSplitter, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var propertyName in path.Split(pathSplitter, StringSplitOptions.RemoveEmptyEntries))
             {
-                currentProperty = GetPropertyInfo(currentType, propertyName);
+                var jsonContract = ContractResolver.ResolveContract(currentType);
+                if (jsonContract is JsonDictionaryContract jsonDictionaryContract)
+                {
+                    currentType = currentType.GetGenericArguments().Last();
+                    continue;
+                }
+                var currentProperty = GetPropertyInfo(currentType, propertyName);
                 currentType = currentProperty.PropertyType;
             }
-            return currentProperty;
+            return currentType;
         }
 
 
@@ -81,17 +89,40 @@ namespace Morcatko.AspNetCore.JsonMergePatch
         {
             return type.GetProperties().Single(property => property.Name.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
         }
-        
+
 
         private bool Exist(object value, IEnumerable<string> paths)
         {
-            if(value == null) return false;
+            if (value == null) return false;
             var currentPath = paths.FirstOrDefault();
             if (currentPath == null)
             {
                 return value != null;
             }
-            return Exist(GetPropertyInfo(value.GetType(), currentPath).GetValue(value), paths.Skip(1));
+
+            object currentValue;
+
+            var jsonContract = ContractResolver.ResolveContract(value.GetType());
+            if (jsonContract is JsonDictionaryContract jsonDictionaryContract)
+            {
+                try
+                {
+                    currentValue = value.GetType().GetProperty("Item")
+                             .GetValue(value, new[] { currentPath });
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+
+            }
+            else
+            {
+                currentValue = GetPropertyInfo(value.GetType(), currentPath).GetValue(value);
+            }
+
+            
+            return Exist(currentValue, paths.Skip(1));
         }
 
         public TModel ApplyTo(TModel objectToApplyTo)
@@ -104,9 +135,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch
         private void ClearAddOperation(TModel objectToApplyTo)
         {
             var addOperations = this.JsonPatchDocument.Operations.Where(operation => operation.OperationType == OperationType.Add).ToArray();
-            foreach(var addOperation in addOperations)
+            foreach (var addOperation in addOperations)
             {
-                if(Exist(objectToApplyTo, addOperation.path.Split(pathSplitter, StringSplitOptions.RemoveEmptyEntries)))
+                if (Exist(objectToApplyTo, addOperation.path.Split(pathSplitter, StringSplitOptions.RemoveEmptyEntries)))
                 {
                     JsonPatchDocument.Operations.Remove(addOperation);
                 }

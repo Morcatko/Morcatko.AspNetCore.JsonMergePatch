@@ -38,14 +38,15 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Builder
             foreach (var jProperty in jObject)
             {
                 var path = pathPrefix + jProperty.Key;
-                if (jProperty.Value is JValue)
-                    jsonMergePatchDocument.AddPatch(path, ((JValue)jProperty.Value).Value);
-                else if (jProperty.Value is JArray)
-                    jsonMergePatchDocument.AddPatch(path, ((JArray)jProperty.Value));
-                else if (jProperty.Value is JObject)
+                if (jProperty.Value is JValue jValue)
+                    jsonMergePatchDocument.AddPatch(path, jValue.Value);
+                else if (jProperty.Value is JArray jArray)
+                    jsonMergePatchDocument.AddPatch(path, jArray);
+                else if (jProperty.Value is JObject @object)
                 {
+                    
                     jsonMergePatchDocument.AddObject(path);
-                    AddOperation(jsonMergePatchDocument, path + "/", (jProperty.Value as JObject));
+                    AddOperation(jsonMergePatchDocument, path + "/", @object);
                 }
             }
         }
