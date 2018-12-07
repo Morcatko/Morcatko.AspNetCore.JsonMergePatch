@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Morcatko.AspNetCore.JsonMergePatch.Tests\Server\DataController.cs" Link="Server\DataController.cs" />
-    <Compile Include="..\Morcatko.AspNetCore.JsonMergePatch.Tests\Server\Repository.cs" Link="Server\Repository.cs" />
-    <Compile Include="..\Morcatko.AspNetCore.JsonMergePatch.Tests\Server\TestModel.cs" Link="Server\TestModel.cs" />
+    <Compile Include="..\Morcatko.AspNetCore.JsonMergePatch.Tests\Integration\Server\DataController.cs" Link="Server\DataController.cs" />
+    <Compile Include="..\Morcatko.AspNetCore.JsonMergePatch.Tests\Integration\Server\Repository.cs" Link="Server\Repository.cs" />
+    <Compile Include="..\Morcatko.AspNetCore.JsonMergePatch.Tests\TestModel.cs" Link="Server\TestModel.cs" />
   </ItemGroup>
 
   <ItemGroup>

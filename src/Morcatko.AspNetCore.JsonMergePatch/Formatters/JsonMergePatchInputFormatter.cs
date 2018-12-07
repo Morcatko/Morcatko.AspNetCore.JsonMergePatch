@@ -21,22 +21,22 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 		private static readonly MediaTypeHeaderValue JsonMergePatchMediaType = MediaTypeHeaderValue.Parse(JsonMergePatchDocument.ContentType).CopyAsReadOnly();
 
 		private readonly IArrayPool<char> _charPool;
-        private readonly JsonMergePatchOptions _options;
+		private readonly JsonMergePatchOptions _options;
 
-        public JsonMergePatchInputFormatter(
+		public JsonMergePatchInputFormatter(
 			ILogger logger,
 			JsonSerializerSettings serializerSettings,
 			ArrayPool<char> charPool,
 			ObjectPoolProvider objectPoolProvider,
-            JsonMergePatchOptions options)
+			JsonMergePatchOptions options)
 			: base(logger, serializerSettings, charPool, objectPoolProvider)
 		{
 			this._charPool = new JsonArrayPool<char>(charPool);
 
 			SupportedMediaTypes.Clear();
 			SupportedMediaTypes.Add(JsonMergePatchMediaType);
-            this._options = options;
-        }
+			this._options = options;
+		}
 
 		private static bool ContainerIsIEnumerable(InputFormatterContext context) => context.ModelType.IsGenericType && (context.ModelType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
