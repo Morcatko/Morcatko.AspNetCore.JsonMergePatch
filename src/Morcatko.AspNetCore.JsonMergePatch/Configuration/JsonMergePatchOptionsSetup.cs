@@ -15,12 +15,14 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Configuration
 		private readonly JsonSerializerSettings _jsonSerializerSettings;
 		private readonly ArrayPool<char> _charPool;
 		private readonly ObjectPoolProvider _objectPoolProvider;
+        private readonly IOptions<JsonMergePatchOptions> _options;
 
-		public JsonMergePatchOptionsSetup(
+        public JsonMergePatchOptionsSetup(
 			ILoggerFactory loggerFactory,
 			IOptions<MvcJsonOptions> jsonOptions,
 			ArrayPool<char> charPool,
-			ObjectPoolProvider objectPoolProvider)
+			ObjectPoolProvider objectPoolProvider,
+            IOptions<JsonMergePatchOptions> options)
 		{
 			if (loggerFactory == null)
 			{
@@ -46,7 +48,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Configuration
 			_jsonSerializerSettings = jsonOptions.Value.SerializerSettings;
 			_charPool = charPool;
 			_objectPoolProvider = objectPoolProvider;
-		}
+            _options = options;
+        }
 
 		public void Configure(MvcOptions options)
 		{
@@ -55,7 +58,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Configuration
 				jsonMergePatchLogger,
 				_jsonSerializerSettings,
 				_charPool,
-				_objectPoolProvider));
+				_objectPoolProvider, _options.Value));
 		}
 	}
 }

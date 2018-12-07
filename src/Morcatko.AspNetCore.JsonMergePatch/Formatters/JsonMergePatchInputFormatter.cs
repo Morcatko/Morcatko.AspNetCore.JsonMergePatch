@@ -21,25 +21,28 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 		private static readonly MediaTypeHeaderValue JsonMergePatchMediaType = MediaTypeHeaderValue.Parse(JsonMergePatchDocument.ContentType).CopyAsReadOnly();
 
 		private readonly IArrayPool<char> _charPool;
+        private readonly JsonMergePatchOptions _options;
 
-		public JsonMergePatchInputFormatter(
+        public JsonMergePatchInputFormatter(
 			ILogger logger,
 			JsonSerializerSettings serializerSettings,
 			ArrayPool<char> charPool,
-			ObjectPoolProvider objectPoolProvider)
+			ObjectPoolProvider objectPoolProvider,
+            JsonMergePatchOptions options)
 			: base(logger, serializerSettings, charPool, objectPoolProvider)
 		{
 			this._charPool = new JsonArrayPool<char>(charPool);
 
 			SupportedMediaTypes.Clear();
 			SupportedMediaTypes.Add(JsonMergePatchMediaType);
-		}
+            this._options = options;
+        }
 
 		private static bool ContainerIsIEnumerable(InputFormatterContext context) => context.ModelType.IsGenericType && (context.ModelType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
 		private JsonMergePatchDocument CreatePatchDocument(Type jsonMergePatchType, Type modelType, JObject jObject, JsonSerializer jsonSerializer)
 		{
-			var jsonMergePatchDocument = PatchBuilder.CreatePatchDocument(jsonMergePatchType, modelType, jObject, jsonSerializer);
+			var jsonMergePatchDocument = PatchBuilder.CreatePatchDocument(jsonMergePatchType, modelType, jObject, jsonSerializer, this._options);
 			jsonMergePatchDocument.ContractResolver = SerializerSettings.ContractResolver;
 			return jsonMergePatchDocument;
 		}

@@ -2,6 +2,12 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+# NCrunch
+*ncrunch*
+*.ncrunch*
+.*crunch*.local.xml
+
+
 # User-specific files
 *.suo
 *.user
