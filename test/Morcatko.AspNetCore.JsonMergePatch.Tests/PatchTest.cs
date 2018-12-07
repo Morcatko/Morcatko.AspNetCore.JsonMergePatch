@@ -131,7 +131,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
                 var patchedModel = await server.MergePatchAsync<TestModel>("api/data/0", new { subModels = new { test = new { } } });
 
                 var expected = GetTestModel();
-                expected.SubModels["test"]= new SubModel();
+                expected.SubModels["test"] = new SubModel();
                 Assert.Equal(expected, patchedModel);
             }
         }
@@ -142,24 +142,41 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
             using (var server = Helper.CreateServer())
             {
                 var model = GetTestModel();
-                model.SubModels["test"] = new SubModel{ Value1 = "a value"};
+                model.SubModels["test"] = new SubModel { Value1 = "a value" };
                 await server.PostAsync("api/data/0", model);
 
                 var patchedModel = await server.MergePatchAsync<TestModel>("api/data/0", new { subModels = new { test = new { value1 = "a new value" } } });
 
                 var expected = GetTestModel();
-                expected.SubModels["test"]= new SubModel{ Value1 = "a new value"};
+                expected.SubModels["test"] = new SubModel { Value1 = "a new value" };
                 Assert.Equal(expected, patchedModel);
             }
         }
 
         [Fact]
-        public async Task PatchRemoveADictionaryEntry()
+        public async Task PatchDoesNotRemoveADictionaryEntry()
         {
             using (var server = Helper.CreateServer())
             {
                 var model = GetTestModel();
-                model.SubModels["test"] = new SubModel{ Value1 = "a value"};
+                model.SubModels["test"] = new SubModel { Value1 = "a value" };
+                await server.PostAsync("api/data/0", model);
+
+                var patchedModel = await server.MergePatchAsync<TestModel>("api/data/0", new { subModels = new { test = (object)null } });
+
+                var expected = GetTestModel();
+                expected.SubModels["test"] = null;
+                Assert.Equal(expected, patchedModel);
+            }
+        }
+
+        [Fact]
+        public async Task PatchRemoveADictionaryEntryWhenOption()
+        {
+            using (var server = Helper.CreateServer(option => option.EnableDelete = true))
+            {
+                var model = GetTestModel();
+                model.SubModels["test"] = new SubModel { Value1 = "a value" };
                 await server.PostAsync("api/data/0", model);
 
                 var patchedModel = await server.MergePatchAsync<TestModel>("api/data/0", new { subModels = new { test = (object)null } });
@@ -168,6 +185,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
                 Assert.Equal(expected, patchedModel);
             }
         }
+
 
         [Fact]
         public async Task PatchSubPropertyOfNotExistingObject()
@@ -238,13 +256,13 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
             }
 
         }
-            [Fact]
+        [Fact]
         public async Task PatchRemoveSubSubObjectEmpty()
         {
             using (var server = Helper.CreateServer())
             {
                 var model = GetTestModel();
-               
+
                 await server.PostAsync("api/data/0", model);
 
                 var patchedModel = await server.MergePatchAsync<TestModel>("api/data/0", new { subModel = new { subSubModel = (object)null } });

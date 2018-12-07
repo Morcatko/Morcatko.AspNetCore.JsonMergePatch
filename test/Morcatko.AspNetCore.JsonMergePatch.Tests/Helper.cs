@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +11,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Server
 {
     static class Helper
     {
-        public static TestServer CreateServer() => new TestServer(new WebHostBuilder().UseStartup<Startup>());
+        public static TestServer CreateServer(Action<JsonMergePatchOptions> configure = null) => new TestServer(new WebHostBuilder()
+            .ConfigureServices(services => services.Configure(configure ?? (_ => {})))
+            .UseStartup<Startup>());
 
         public static HttpContent HttpContent(object data, string contentType)
         {

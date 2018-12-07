@@ -16,6 +16,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch
         public const string ContentType = "application/merge-patch+json";
         internal abstract void AddPatch(string path, object value);
         internal abstract void AddObject(string path);
+        internal abstract void Delete(string path);
         public abstract IContractResolver ContractResolver { get; set; }
 
         /// <summary>
@@ -58,7 +59,12 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 
         internal override void AddPatch(string path, object value)
         {
-            JsonPatchDocument.Operations.Add(new Operation<TModel>(value == null ? removeOp :  replaceOp, path, null, value));
+            JsonPatchDocument.Operations.Add(new Operation<TModel>(replaceOp, path, null, value));
+        }
+
+        internal override void Delete(string path)
+        {
+            JsonPatchDocument.Operations.Add(new Operation<TModel>(removeOp, path, null,  null));
         }
 
         internal override void AddObject(string path)
