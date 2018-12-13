@@ -14,4 +14,4 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("a8bb3010-1e76-4c1e-8d99-3ee46341ed42")]
-[assembly:InternalsVisibleTo("Morcatko.AspNetCore.JsonMergePatch.Test")]
+[assembly: InternalsVisibleTo("Morcatko.AspNetCore.JsonMergePatch.Test, PublicKey=e2aa96d34211afc0")]

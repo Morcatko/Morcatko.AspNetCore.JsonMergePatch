@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ED9B14F4-1239-4248-AE8D-5E1BFE968B96}"
 	ProjectSection(SolutionItems) = preProject
 		dotnet-pack.ps1 = dotnet-pack.ps1
+		signing.snk = signing.snk
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8B21863B-36B9-45A6-8D60-EC193239552B}"
