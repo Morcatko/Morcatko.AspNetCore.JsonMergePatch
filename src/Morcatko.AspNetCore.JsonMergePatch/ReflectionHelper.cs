@@ -51,7 +51,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch
                             .GetProperty("Item")
                             .GetValue(value, new[] { currentPath });
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return false;
                 }
