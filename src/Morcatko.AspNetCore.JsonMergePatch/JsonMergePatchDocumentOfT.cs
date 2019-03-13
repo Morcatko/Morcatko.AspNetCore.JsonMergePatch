@@ -4,149 +4,109 @@ using Morcatko.AspNetCore.JsonMergePatch.Builder;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Morcatko.AspNetCore.JsonMergePatch
 {
-	public abstract class JsonMergePatchDocument
-	{
-		public const string ContentType = "application/merge-patch+json";
-		internal abstract void AddPatch(string path, object value);
-		internal abstract void AddObject(string path);
-		internal abstract void Delete(string path);
-		public abstract IContractResolver ContractResolver { get; set; }
+    public abstract class JsonMergePatchDocument
+    {
+        public const string ContentType = "application/merge-patch+json";
 
-		/// <summary>
-		/// Returns Patch computed as "diff" of "patched - original"
-		/// Warning: Only for tests - result.Model is not same as when user as InputFormatter
-		/// </summary>
-		public static JsonMergePatchDocument<TModel> Build<TModel>(TModel original, TModel patched) where TModel : class
-			=> new PatchBuilder<TModel>().Build(original, patched);
+        internal abstract void AddOperation_Add(string path);
+        internal abstract void AddOperation_Replace(string path, object value);
+        internal abstract void AddOperation_Remove(string path);
 
-		public static JsonMergePatchDocument<TModel> Build<TModel>(JObject jsonObject) where TModel : class
-			=> new PatchBuilder<TModel>().Build(jsonObject);
+        public abstract IContractResolver ContractResolver { get; set; }
 
-		public static JsonMergePatchDocument<TModel> Build<TModel>(string jsonObject) where TModel : class
-			=> new PatchBuilder<TModel>().Build(jsonObject);
-	}
+        /// <summary>
+        /// Returns Patch computed as "diff" of "patched - original"
+        /// Warning: Only for tests - result.Model is not same as when user as InputFormatter
+        /// </summary>
+        public static JsonMergePatchDocument<TModel> Build<TModel>(TModel original, TModel patched) where TModel : class
+            => new PatchBuilder<TModel>().Build(original, patched);
 
-	public class JsonMergePatchDocument<TModel> : JsonMergePatchDocument where TModel : class
-	{
-		private static string replaceOp = OperationType.Replace.ToString();
-		private static string addOp = OperationType.Add.ToString();
-		private static string removeOp = OperationType.Remove.ToString();
+        public static JsonMergePatchDocument<TModel> Build<TModel>(JObject jsonObject) where TModel : class
+            => new PatchBuilder<TModel>().Build(jsonObject);
 
-		private static char[] pathSplitter = new[] { '/' };
-		private Type Type = typeof(TModel);
+        public static JsonMergePatchDocument<TModel> Build<TModel>(string jsonObject) where TModel : class
+            => new PatchBuilder<TModel>().Build(jsonObject);
+    }
 
-		public TModel Model { get; internal set; }
-
-		public JsonPatchDocument<TModel> JsonPatchDocument { get; } = new JsonPatchDocument<TModel>();
-
-		public override IContractResolver ContractResolver
-		{
-			get => JsonPatchDocument.ContractResolver;
-			set => JsonPatchDocument.ContractResolver = value;
-		}
-
-		internal JsonMergePatchDocument(TModel model)
-		{
-			this.Model = model;
-		}
-
-		internal override void AddPatch(string path, object value)
-		{
-			JsonPatchDocument.Operations.Add(new Operation<TModel>(replaceOp, path, null, value));
-		}
-
-		internal override void Delete(string path)
-		{
-			JsonPatchDocument.Operations.Add(new Operation<TModel>(removeOp, path, null, null));
-		}
-
-		internal override void AddObject(string path)
-		{
-			var propertyType = this.RetrievePropertyTypeFromPath(Type, path);
-			JsonPatchDocument.Operations.Add(new Operation<TModel>(addOp, path, null, ContractResolver.ResolveContract(propertyType).DefaultCreator()));
-		}
-
-		private Type RetrievePropertyTypeFromPath(Type type, string path)
-		{
-			var currentType = type;
-			foreach (var propertyName in path.Split(pathSplitter, StringSplitOptions.RemoveEmptyEntries))
-			{
-				var jsonContract = ContractResolver.ResolveContract(currentType);
-				if (jsonContract is JsonDictionaryContract jsonDictionaryContract)
-				{
-					currentType = jsonDictionaryContract.DictionaryValueType;
-					continue;
-				}
-				var currentProperty = GetPropertyInfo(currentType, propertyName);
-				currentType = currentProperty.PropertyType;
-			}
-			return currentType;
-		}
+    public class JsonMergePatchDocument<TModel> : JsonMergePatchDocument where TModel : class
+    {
+        private static string replaceOp = OperationType.Replace.ToString();
+        private static string addOp = OperationType.Add.ToString();
+        private static string removeOp = OperationType.Remove.ToString();
 
 
-		private PropertyInfo GetPropertyInfo(Type type, string propertyName)
-		{
-			return type.GetProperties().Single(property => property.Name.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
-		}
+        private readonly Type _modelType = typeof(TModel);
+        private readonly JsonPatchDocument<TModel> _jsonPatchDocument = new JsonPatchDocument<TModel>();
+
+        public TModel Model { get; internal set; }
+
+        public override IContractResolver ContractResolver
+        {
+            get => _jsonPatchDocument.ContractResolver;
+            set => _jsonPatchDocument.ContractResolver = value;
+        }
+
+        internal JsonMergePatchDocument(TModel model)
+        {
+            this.Model = model;
+        }
+
+        #region Build Patch
+        internal override void AddOperation_Replace(string path, object value)
+            => _jsonPatchDocument.Operations.Add(new Operation<TModel>(replaceOp, path, null, value));
+
+        internal override void AddOperation_Remove(string path)
+            => _jsonPatchDocument.Operations.Add(new Operation<TModel>(removeOp, path, null, null));
+
+        internal override void AddOperation_Add(string path)
+        {
+            var propertyType = ReflectionHelper.GetPropertyTypeFromPath(_modelType, path, ContractResolver);
+            _jsonPatchDocument.Operations.Add(new Operation<TModel>(addOp, path, null, ContractResolver.ResolveContract(propertyType).DefaultCreator()));
+        }
+        #endregion
 
 
-		private bool Exist(object value, IEnumerable<string> paths)
-		{
-			if (value == null) return false;
-			var currentPath = paths.FirstOrDefault();
-			if (currentPath == null)
-			{
-				return value != null;
-			}
+        bool clean = false;
+        private void ClearAddOperation(object objectToApplyTo)
+        {
+            if (clean)
+                throw new NotSupportedException("Cannot apply more than once");
 
-			object currentValue;
+            var addOperations = _jsonPatchDocument.Operations.Where(operation => operation.OperationType == OperationType.Add).ToArray();
+            foreach (var addOperation in addOperations)
+            {
+                if (ReflectionHelper.Exist(objectToApplyTo, addOperation.path, ContractResolver))
+                {
+                    _jsonPatchDocument.Operations.Remove(addOperation);
+                }
+            }
+            clean = true;
+        }
 
-			var jsonContract = ContractResolver.ResolveContract(value.GetType());
-			if (jsonContract is JsonDictionaryContract)
-			{
-				try
-				{
-					currentValue = value.GetType().GetProperty("Item")
-							 .GetValue(value, new[] { currentPath });
-				}
-				catch (Exception)
-				{
-					return false;
-				}
+        public TModel ApplyTo(TModel objectToApplyTo)
+        {
+            this.ClearAddOperation(objectToApplyTo);
+            _jsonPatchDocument.ApplyTo(objectToApplyTo);
+            return objectToApplyTo;
+        }
 
-			}
-			else
-			{
-				currentValue = GetPropertyInfo(value.GetType(), currentPath).GetValue(value);
-			}
+        public TOtherModel ApplyTo<TOtherModel>(TOtherModel objectToApplyTo) where TOtherModel : class
+        {
+            this.ClearAddOperation(objectToApplyTo);
 
+            var newP = new JsonPatchDocument<TOtherModel>(
+                _jsonPatchDocument
+                    .Operations
+                    .Select(o => new Operation<TOtherModel>(o.op, o.path, o.from, o.value))
+                    .ToList(),
+                ContractResolver);
 
-			return Exist(currentValue, paths.Skip(1));
-		}
-
-		public TModel ApplyTo(TModel objectToApplyTo)
-		{
-			this.ClearAddOperation(objectToApplyTo);
-			JsonPatchDocument.ApplyTo(objectToApplyTo);
-			return objectToApplyTo;
-		}
-
-		private void ClearAddOperation(TModel objectToApplyTo)
-		{
-			var addOperations = this.JsonPatchDocument.Operations.Where(operation => operation.OperationType == OperationType.Add).ToArray();
-			foreach (var addOperation in addOperations)
-			{
-				if (Exist(objectToApplyTo, addOperation.path.Split(pathSplitter, StringSplitOptions.RemoveEmptyEntries)))
-				{
-					JsonPatchDocument.Operations.Remove(addOperation);
-				}
-			}
-		}
-	}
+            newP.ApplyTo(objectToApplyTo);
+            return objectToApplyTo;
+        }
+    }
 }
