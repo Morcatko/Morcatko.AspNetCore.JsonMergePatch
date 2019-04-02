@@ -40,7 +40,7 @@ public void ConfigureServices(IServiceCollection services)
 {
     ...
     services
-        .AddMvc()
+        .AddMvc()              // or .AddMvcCore()
         .AddJsonMergePatch();
     ...
 }
@@ -68,6 +68,14 @@ services.AddSwaggerGen(c =>
         c.OperationFilter<JsonMergePatchDocumentOperationFilter>();
     });
 ```
+
+### Options
+```
+    services
+        .AddMvc()
+        .AddJsonMergePatch(o => ....)
+```
+ * bool EnableDelete - Deletes items when target object is Dictionary and patched value is null
 
 ### How to - unit testing
 See `Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Json.Simple` class for more examples

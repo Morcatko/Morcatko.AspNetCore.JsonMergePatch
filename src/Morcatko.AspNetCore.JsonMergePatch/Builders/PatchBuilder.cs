@@ -45,11 +45,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Builder
 				if (jProperty.Value is JValue jValue)
 				{
 					if (options.EnableDelete && jValue.Value == null)
-					{
 						jsonMergePatchDocument.AddOperation_Remove(path);
-						continue;
-					}
-					jsonMergePatchDocument.AddOperation_Replace(path, jValue.Value);
+					else 
+						jsonMergePatchDocument.AddOperation_Replace(path, jValue.Value);
 				}
 				else if (jProperty.Value is JArray jArray)
 					jsonMergePatchDocument.AddOperation_Replace(path, jArray);
