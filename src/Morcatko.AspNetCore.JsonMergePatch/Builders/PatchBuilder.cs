@@ -46,16 +46,16 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Builder
 				{
 					if (options.EnableDelete && jValue.Value == null)
 					{
-						jsonMergePatchDocument.Delete(path);
+						jsonMergePatchDocument.AddOperation_Remove(path);
 						continue;
 					}
-					jsonMergePatchDocument.AddPatch(path, jValue.Value);
+					jsonMergePatchDocument.AddOperation_Replace(path, jValue.Value);
 				}
 				else if (jProperty.Value is JArray jArray)
-					jsonMergePatchDocument.AddPatch(path, jArray);
+					jsonMergePatchDocument.AddOperation_Replace(path, jArray);
 				else if (jProperty.Value is JObject jObject)
 				{
-					jsonMergePatchDocument.AddObject(path);
+					jsonMergePatchDocument.AddOperation_Add(path);
 					AddOperation(jsonMergePatchDocument, path + "/", jObject, options);
 				}
 			}

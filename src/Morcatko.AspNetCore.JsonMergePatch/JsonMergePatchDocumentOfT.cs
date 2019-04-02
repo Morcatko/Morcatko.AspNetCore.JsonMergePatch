@@ -4,18 +4,18 @@ using Morcatko.AspNetCore.JsonMergePatch.Builder;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Morcatko.AspNetCore.JsonMergePatch
 {
 	public abstract class JsonMergePatchDocument
 	{
 		public const string ContentType = "application/merge-patch+json";
-		internal abstract void AddPatch(string path, object value);
-		internal abstract void AddObject(string path);
-		internal abstract void Delete(string path);
+
+		internal abstract void AddOperation_Add(string path);
+		internal abstract void AddOperation_Replace(string path, object value);
+		internal abstract void AddOperation_Remove(string path);
+
 		public abstract IContractResolver ContractResolver { get; set; }
 
 		/// <summary>
@@ -38,17 +38,16 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 		private static string addOp = OperationType.Add.ToString();
 		private static string removeOp = OperationType.Remove.ToString();
 
-		private static char[] pathSplitter = new[] { '/' };
-		private Type Type = typeof(TModel);
+
+		private readonly Type _modelType = typeof(TModel);
+		private readonly JsonPatchDocument<TModel> _jsonPatchDocument = new JsonPatchDocument<TModel>();
 
 		public TModel Model { get; internal set; }
 
-		public JsonPatchDocument<TModel> JsonPatchDocument { get; } = new JsonPatchDocument<TModel>();
-
 		public override IContractResolver ContractResolver
 		{
-			get => JsonPatchDocument.ContractResolver;
-			set => JsonPatchDocument.ContractResolver = value;
+			get => _jsonPatchDocument.ContractResolver;
+			set => _jsonPatchDocument.ContractResolver = value;
 		}
 
 		internal JsonMergePatchDocument(TModel model)
@@ -56,97 +55,58 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 			this.Model = model;
 		}
 
-		internal override void AddPatch(string path, object value)
-		{
-			JsonPatchDocument.Operations.Add(new Operation<TModel>(replaceOp, path, null, value));
-		}
+		#region Build Patch
+		internal override void AddOperation_Replace(string path, object value)
+			=> _jsonPatchDocument.Operations.Add(new Operation<TModel>(replaceOp, path, null, value));
 
-		internal override void Delete(string path)
-		{
-			JsonPatchDocument.Operations.Add(new Operation<TModel>(removeOp, path, null, null));
-		}
+		internal override void AddOperation_Remove(string path)
+			=> _jsonPatchDocument.Operations.Add(new Operation<TModel>(removeOp, path, null, null));
 
-		internal override void AddObject(string path)
+		internal override void AddOperation_Add(string path)
 		{
-			var propertyType = this.RetrievePropertyTypeFromPath(Type, path);
-			JsonPatchDocument.Operations.Add(new Operation<TModel>(addOp, path, null, ContractResolver.ResolveContract(propertyType).DefaultCreator()));
+			var propertyType = ReflectionHelper.GetPropertyTypeFromPath(_modelType, path, ContractResolver);
+			_jsonPatchDocument.Operations.Add(new Operation<TModel>(addOp, path, null, ContractResolver.ResolveContract(propertyType).DefaultCreator()));
 		}
+		#endregion
 
-		private Type RetrievePropertyTypeFromPath(Type type, string path)
+
+		bool clean = false;
+		private void ClearAddOperation(object objectToApplyTo)
 		{
-			var currentType = type;
-			foreach (var propertyName in path.Split(pathSplitter, StringSplitOptions.RemoveEmptyEntries))
+			if (clean)
+				throw new NotSupportedException("Cannot apply more than once");
+
+			var addOperations = _jsonPatchDocument.Operations.Where(operation => operation.OperationType == OperationType.Add).ToArray();
+			foreach (var addOperation in addOperations)
 			{
-				var jsonContract = ContractResolver.ResolveContract(currentType);
-				if (jsonContract is JsonDictionaryContract jsonDictionaryContract)
+				if (ReflectionHelper.Exist(objectToApplyTo, addOperation.path, ContractResolver))
 				{
-					currentType = jsonDictionaryContract.DictionaryValueType;
-					continue;
+					_jsonPatchDocument.Operations.Remove(addOperation);
 				}
-				var currentProperty = GetPropertyInfo(currentType, propertyName);
-				currentType = currentProperty.PropertyType;
 			}
-			return currentType;
-		}
-
-
-		private PropertyInfo GetPropertyInfo(Type type, string propertyName)
-		{
-			return type.GetProperties().Single(property => property.Name.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
-		}
-
-
-		private bool Exist(object value, IEnumerable<string> paths)
-		{
-			if (value == null) return false;
-			var currentPath = paths.FirstOrDefault();
-			if (currentPath == null)
-			{
-				return value != null;
-			}
-
-			object currentValue;
-
-			var jsonContract = ContractResolver.ResolveContract(value.GetType());
-			if (jsonContract is JsonDictionaryContract)
-			{
-				try
-				{
-					currentValue = value.GetType().GetProperty("Item")
-							 .GetValue(value, new[] { currentPath });
-				}
-				catch (Exception)
-				{
-					return false;
-				}
-
-			}
-			else
-			{
-				currentValue = GetPropertyInfo(value.GetType(), currentPath).GetValue(value);
-			}
-
-
-			return Exist(currentValue, paths.Skip(1));
+			clean = true;
 		}
 
 		public TModel ApplyTo(TModel objectToApplyTo)
 		{
 			this.ClearAddOperation(objectToApplyTo);
-			JsonPatchDocument.ApplyTo(objectToApplyTo);
+			_jsonPatchDocument.ApplyTo(objectToApplyTo);
 			return objectToApplyTo;
 		}
 
-		private void ClearAddOperation(TModel objectToApplyTo)
+		public TOtherModel ApplyTo<TOtherModel>(TOtherModel objectToApplyTo) where TOtherModel : class
 		{
-			var addOperations = this.JsonPatchDocument.Operations.Where(operation => operation.OperationType == OperationType.Add).ToArray();
-			foreach (var addOperation in addOperations)
-			{
-				if (Exist(objectToApplyTo, addOperation.path.Split(pathSplitter, StringSplitOptions.RemoveEmptyEntries)))
-				{
-					JsonPatchDocument.Operations.Remove(addOperation);
-				}
-			}
+			this.ClearAddOperation(objectToApplyTo);
+
+			var newP = new JsonPatchDocument<TOtherModel>(
+				_jsonPatchDocument
+					.Operations
+					.Select(o => new Operation<TOtherModel>(o.op, o.path, o.from, o.value))
+					.ToList(),
+				ContractResolver);
+
+			newP.ApplyTo(objectToApplyTo);
+			return objectToApplyTo;
 		}
 	}
 }
