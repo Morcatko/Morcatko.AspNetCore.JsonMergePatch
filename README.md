@@ -58,6 +58,12 @@ public void Patch([FromBody] JsonMergePatchDocument<Model> patch)
     ...
 }
 ```
+You can apply a patch to a different Type (be carefull, all C# static typing is ignored) - see [#16](https://github.com/Morcatko/Morcatko.AspNetCore.JsonMergePatch/issues/16) for more details.
+```
+BackendModel backendModel;
+JsonMergePatch<DtoModel> patch;
+patch.ApplyTo(backendModel)
+```
 
 4. Swagger config (optional)
 
