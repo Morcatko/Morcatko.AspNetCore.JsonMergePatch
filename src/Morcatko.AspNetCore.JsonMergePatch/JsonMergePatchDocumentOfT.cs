@@ -4,6 +4,7 @@ using Morcatko.AspNetCore.JsonMergePatch.Builder;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Morcatko.AspNetCore.JsonMergePatch
@@ -48,6 +49,11 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 		{
 			get => _jsonPatchDocument.ContractResolver;
 			set => _jsonPatchDocument.ContractResolver = value;
+		}
+
+		public List<Operation<TModel>> Operations
+		{
+			get => _jsonPatchDocument.Operations;
 		}
 
 		internal JsonMergePatchDocument(TModel model)
