@@ -50,5 +50,16 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Json
 
 			Assert.Equal(3, result.Integer);
 		}
-	}
+
+        [Fact]
+        public void NoDiff()
+        {
+            var original = new SimpleClass();
+            var patched = new SimpleClass();
+
+            var patch = builder.Build(original, patched);
+            
+            Assert.Equal(0, patch.Operations.Count);
+        }
+    }
 }

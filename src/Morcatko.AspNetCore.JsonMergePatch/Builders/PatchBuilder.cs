@@ -21,7 +21,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Builder
 
 		#region Static methods
 		public static JsonMergePatchDocument<TModel> Build<TModel>(TModel original, TModel patched, JsonMergePatchOptions options = null) where TModel : class
-			=> Build<TModel>(DiffBuilder.Build(original, patched), options);
+			=> Build<TModel>(DiffBuilder.Build(original, patched) ?? new JObject(), options);
 
 		public static JsonMergePatchDocument<TModel> Build<TModel>(string jsonObjectPatch, JsonMergePatchOptions options = null) where TModel : class
 			=> Build<TModel>(JObject.Parse(jsonObjectPatch), options);
