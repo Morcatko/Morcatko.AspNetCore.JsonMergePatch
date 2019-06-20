@@ -6,11 +6,12 @@
     <VersionSuffix Condition=" '$(VersionSuffix)'=='' ">0</VersionSuffix>
 
     <PackageId>Morcatko.AspNetCore.JsonMergePatch</PackageId>
+    <Title>JSON Merge Patch for ASP.NET Core 2.x</Title>
     <PackageVersion>2.0.$(VersionSuffix)</PackageVersion>
     <Authors>Ondrej Morsky</Authors>
     <Description>JSON Merge Patch support for ASP.NET Core 2.X</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Prerelease</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <Copyright>Copyright 2019 (c). All rights reserved.</Copyright>
     <PackageTags>ASP.NET Core;JSON Merge Patch;RFC 7396</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
