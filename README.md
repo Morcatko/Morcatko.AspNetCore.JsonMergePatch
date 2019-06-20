@@ -1,5 +1,7 @@
 # JSON Merge Patch support for ASP.NET Core 2.x
 
+![Nuget](https://img.shields.io/nuget/v/Morcatko.AspNetCore.JsonMergePatch.svg)
+
 ### JSON Merge Patch
 - [RFC 7396](https://tools.ietf.org/html/rfc7396)
 - performs partial resource update similar to JSON Patch
