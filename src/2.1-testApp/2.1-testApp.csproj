@@ -20,8 +20,4 @@
     <ProjectReference Include="..\2.1-JsonMergePatch\2.1-JsonMergePatch.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Server\" />
-  </ItemGroup>
-
 </Project>
