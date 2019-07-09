@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-
+    <RootNamespace>Morcatko.AspNetCore.JsonMergePatch.Tests</RootNamespace>
+    
     <IsPackable>false</IsPackable>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\signing.snk</AssemblyOriginatorKeyFile>

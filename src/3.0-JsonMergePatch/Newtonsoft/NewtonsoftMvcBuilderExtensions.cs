@@ -2,12 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Morcatko.AspNetCore.JsonMergePatch.Configuration;
 using System;
 
 namespace Morcatko.AspNetCore.JsonMergePatch
 {
-	public static class MvcBuilderExtensions
+	public static class NewtonsoftMvcBuilderExtensions
 	{
 		private static void AddNewtonsoftJsonMergePatch(this IServiceCollection services, Action<JsonMergePatchOptions> configure = null)
 		{
@@ -18,6 +17,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 
 		public static IMvcBuilder AddNewtonsoftJsonMergePatch(this IMvcBuilder builder, Action<JsonMergePatchOptions> configure = null)
 		{
+			builder.AddNewtonsoftJson();
 			builder.Services.AddNewtonsoftJsonMergePatch(configure);
 			return builder;
 		}
@@ -28,13 +28,5 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 			builder.Services.AddNewtonsoftJsonMergePatch(configure);
 			return builder;
 		}
-	}
-
-	public class JsonMergePatchOptions
-	{
-		/// <summary>
-		/// Allow to delete property when setting null on a dictionary type
-		/// </summary>
-		public bool EnableDelete { get; set; }
 	}
 }

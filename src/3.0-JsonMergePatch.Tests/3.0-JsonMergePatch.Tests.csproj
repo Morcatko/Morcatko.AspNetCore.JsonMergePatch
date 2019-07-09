@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>Morcatko.AspNetCore.JsonMergePatch.Tests</RootNamespace>
 
     <IsPackable>false</IsPackable>
     <SignAssembly>true</SignAssembly>

@@ -2,11 +2,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.Extensions.Options;
-using Morcatko.AspNetCore.JsonMergePatch.Formatters;
 using System;
 using System.Buffers;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Configuration
+namespace Morcatko.AspNetCore.JsonMergePatch
 {
 	class NewtonsoftJsonMergePatchOptionsSetup : IConfigureOptions<MvcOptions>
 	{

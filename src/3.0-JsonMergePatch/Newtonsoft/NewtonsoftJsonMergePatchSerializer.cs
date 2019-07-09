@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.Formatters;
-using Morcatko.AspNetCore.JsonMergePatch.Builder;
+﻿using Morcatko.AspNetCore.JsonMergePatch.Builder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Linq;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
+namespace Morcatko.AspNetCore.JsonMergePatch
 {
 	class NewtonsoftJsonMergePatchSerializer : JsonSerializer
 	{
@@ -50,8 +49,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 					if (_listContainer != null)
 						throw new ArgumentException("Received object when array was expected"); //This could be handled by returnin list with single item
 
-					var jsonMergePatchDocument = CreatePatchDocument(jObject, _innerjsonSerializer);
-					return InputFormatterResult.Success(jsonMergePatchDocument);
+					return CreatePatchDocument(jObject, _innerjsonSerializer);
 				case JArray jArray:
 					if (_listContainer == null)
 						throw new ArgumentException("Received array when object was expected");
@@ -60,10 +58,10 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 					{
 						_listContainer.Add(CreatePatchDocument(jObject, _innerjsonSerializer));
 					}
-					return InputFormatterResult.Success(_listContainer);
+					return _listContainer;
 			}
 
-			return InputFormatterResult.Failure();
+			throw new NotSupportedException("Unknown jToken type");
 		}
 	}
 }

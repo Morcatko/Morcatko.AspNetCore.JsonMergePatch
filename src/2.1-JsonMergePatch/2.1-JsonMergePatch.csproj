@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>Morcatko.AspNetCore.JsonMergePatch</AssemblyName>
+    <RootNamespace>Morcatko.AspNetCore.JsonMergePatch</RootNamespace>
     <VersionSuffix Condition=" '$(VersionSuffix)'=='' ">0</VersionSuffix>
 
     <PackageId>Morcatko.AspNetCore.JsonMergePatch</PackageId>
