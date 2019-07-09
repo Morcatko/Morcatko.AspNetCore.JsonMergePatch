@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Formatters;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Formatters.Json.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
@@ -21,28 +22,30 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 		private static readonly MediaTypeHeaderValue JsonMergePatchMediaType = MediaTypeHeaderValue.Parse(JsonMergePatchDocument.ContentType).CopyAsReadOnly();
 
 		private readonly IArrayPool<char> _charPool;
-		private readonly JsonMergePatchOptions _options;
+		private readonly JsonMergePatchOptions _jsonMergePatchOptions;
 
 		public JsonMergePatchInputFormatter(
 			ILogger logger,
 			JsonSerializerSettings serializerSettings,
 			ArrayPool<char> charPool,
 			ObjectPoolProvider objectPoolProvider,
-			JsonMergePatchOptions options)
-			: base(logger, serializerSettings, charPool, objectPoolProvider)
+			MvcOptions mvcOptions,
+			MvcJsonOptions mvcJsonOptions,
+			JsonMergePatchOptions jsonMergePatchOptions)
+			: base(logger, serializerSettings, charPool, objectPoolProvider, mvcOptions, mvcJsonOptions)
 		{
 			this._charPool = new JsonArrayPool<char>(charPool);
 
 			SupportedMediaTypes.Clear();
 			SupportedMediaTypes.Add(JsonMergePatchMediaType);
-			this._options = options;
+			_jsonMergePatchOptions = jsonMergePatchOptions;
 		}
 
 		private static bool ContainerIsIEnumerable(InputFormatterContext context) => context.ModelType.IsGenericType && (context.ModelType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
 		private JsonMergePatchDocument CreatePatchDocument(Type jsonMergePatchType, Type modelType, JObject jObject, JsonSerializer jsonSerializer)
 		{
-			var jsonMergePatchDocument = PatchBuilder.CreatePatchDocument(jsonMergePatchType, modelType, jObject, jsonSerializer, this._options);
+			var jsonMergePatchDocument = PatchBuilder.CreatePatchDocument(jsonMergePatchType, modelType, jObject, jsonSerializer, this._jsonMergePatchOptions);
 			jsonMergePatchDocument.ContractResolver = SerializerSettings.ContractResolver;
 			return jsonMergePatchDocument;
 		}

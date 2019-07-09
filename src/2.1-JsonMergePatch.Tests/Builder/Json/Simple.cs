@@ -59,7 +59,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Json
 
             var patch = builder.Build(original, patched);
             
-            Assert.Equal(0, patch.Operations.Count);
+            Assert.Empty(patch.Operations);
         }
     }
 }
