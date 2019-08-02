@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Integration
 {
 	public class MvcCoreTest
 

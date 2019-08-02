@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\3.0-JsonMergePatch\3.0-JsonMergePatch.csproj" />
+    <ProjectReference Include="..\3.0-JsonMergePatch.NewtonsoftJson\3.0-JsonMergePatch.NewtonsoftJson.csproj" />
   </ItemGroup>
 
 </Project>

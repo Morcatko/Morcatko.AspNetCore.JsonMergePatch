@@ -7,7 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1", "2.1", "{A64B8040-7F6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ED9B14F4-1239-4248-AE8D-5E1BFE968B96}"
 	ProjectSection(SolutionItems) = preProject
-		dotnet-pack.ps1 = dotnet-pack.ps1
+		dotnet-pack-2.ps1 = dotnet-pack-2.ps1
+		dotnet-pack-3.ps1 = dotnet-pack-3.ps1
 		signing.snk = signing.snk
 	EndProjectSection
 EndProject
@@ -24,6 +25,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "3.0-JsonMergePatch.Tests", "src\3.0-JsonMergePatch.Tests\3.0-JsonMergePatch.Tests.csproj", "{7A51A5A0-D8FD-47AA-86AE-6E5958E5490D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "3.0-testApp", "src\3.0-testApp\3.0-testApp.csproj", "{556641AE-3A25-4087-81A1-04D1165D97DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3.0-JsonMergePatch.NewtonsoftJson", "src\3.0-JsonMergePatch.NewtonsoftJson\3.0-JsonMergePatch.NewtonsoftJson.csproj", "{B8AE0E4F-46CA-44C0-A974-BFBD47AC1F07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +58,10 @@ Global
 		{556641AE-3A25-4087-81A1-04D1165D97DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{556641AE-3A25-4087-81A1-04D1165D97DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{556641AE-3A25-4087-81A1-04D1165D97DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8AE0E4F-46CA-44C0-A974-BFBD47AC1F07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8AE0E4F-46CA-44C0-A974-BFBD47AC1F07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8AE0E4F-46CA-44C0-A974-BFBD47AC1F07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8AE0E4F-46CA-44C0-A974-BFBD47AC1F07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,6 +73,7 @@ Global
 		{C689A76A-7648-49E1-A315-0F45318A1946} = {45C8140C-AC7A-429F-8B2E-BD8574535B15}
 		{7A51A5A0-D8FD-47AA-86AE-6E5958E5490D} = {45C8140C-AC7A-429F-8B2E-BD8574535B15}
 		{556641AE-3A25-4087-81A1-04D1165D97DF} = {45C8140C-AC7A-429F-8B2E-BD8574535B15}
+		{B8AE0E4F-46CA-44C0-A974-BFBD47AC1F07} = {45C8140C-AC7A-429F-8B2E-BD8574535B15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {835CDCD1-3A3F-4D33-9107-9F961EBDED17}

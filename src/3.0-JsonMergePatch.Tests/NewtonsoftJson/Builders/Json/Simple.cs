@@ -1,9 +1,9 @@
-﻿using Morcatko.AspNetCore.JsonMergePatch.Builder;
+﻿using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Json
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Builders.Json
 {
 	public class Simple
 	{

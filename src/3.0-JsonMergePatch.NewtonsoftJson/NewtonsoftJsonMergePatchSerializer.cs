@@ -1,4 +1,5 @@
-﻿using Morcatko.AspNetCore.JsonMergePatch.Builder;
+﻿using Morcatko.AspNetCore.JsonMergePatch.Internal;
+using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -10,7 +11,6 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 	class NewtonsoftJsonMergePatchSerializer : JsonSerializer
 	{
 		private readonly IList _listContainer;
-		private readonly Type _jsonMergePatchType;
 		private readonly Type _innerModelType;
 		private readonly JsonSerializerSettings _serializerSettings;
 		private readonly JsonMergePatchOptions _jsonMergePatchOptions;
@@ -18,23 +18,21 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 
 		public NewtonsoftJsonMergePatchSerializer(
 			IList listContainer,
-			Type jsonMergePatchType,
 			Type innerModelType,
 			JsonSerializer innerJsonSerializer,
 			JsonSerializerSettings serializerSettings,
 			JsonMergePatchOptions jsonMergePatchOptions)
 		{
 			_listContainer = listContainer;
-			_jsonMergePatchType = jsonMergePatchType;
 			_innerModelType = innerModelType;
 			_serializerSettings = serializerSettings;
 			_jsonMergePatchOptions = jsonMergePatchOptions;
 			_innerjsonSerializer = innerJsonSerializer;
 		}
 
-		private JsonMergePatchDocument CreatePatchDocument(JObject jObject, JsonSerializer jsonSerializer)
+		private IInternalJsonMergePatchDocument CreatePatchDocument(JObject jObject, JsonSerializer jsonSerializer)
 		{
-			var jsonMergePatchDocument = PatchBuilder.CreatePatchDocument(_jsonMergePatchType, _innerModelType, jObject, jsonSerializer, _jsonMergePatchOptions);
+			var jsonMergePatchDocument = PatchBuilder.CreatePatchDocument(_innerModelType, jObject, jsonSerializer, _jsonMergePatchOptions);
 			jsonMergePatchDocument.ContractResolver = _serializerSettings.ContractResolver;
 			return jsonMergePatchDocument;
 		}

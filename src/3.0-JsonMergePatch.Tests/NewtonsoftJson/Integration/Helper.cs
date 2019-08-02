@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server;
+using Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Integration.Server;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Integration
 {
 	static class Helper
 	{

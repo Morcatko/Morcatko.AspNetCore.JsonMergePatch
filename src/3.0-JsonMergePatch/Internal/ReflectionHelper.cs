@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Morcatko.AspNetCore.JsonMergePatch
+namespace Morcatko.AspNetCore.JsonMergePatch.Internal
 {
+#warning This should be in Newtonsoft.Json package probably
 	static class ReflectionHelper
 	{
 		private static char[] pathSplitter = new[] { '/' };

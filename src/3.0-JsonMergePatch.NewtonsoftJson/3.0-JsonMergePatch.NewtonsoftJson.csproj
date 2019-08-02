@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
-    <AssemblyName>Morcatko.AspNetCore.JsonMergePatch</AssemblyName>
-    <RootNamespace>Morcatko.AspNetCore.JsonMergePatch</RootNamespace>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson</RootNamespace>
+    <AssemblyName>Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson</AssemblyName>
     <VersionSuffix Condition=" '$(VersionSuffix)'=='' ">0</VersionSuffix>
 
-    <PackageId>Morcatko.AspNetCore.JsonMergePatch</PackageId>
-    <Title>JSON Merge Patch for ASP.NET Core 3.x (Base Package)</Title>
+    <PackageId>Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson</PackageId>
+    <Title>JSON Merge Patch for ASP.NET Core 3.x (Newtonsoft.Json)</Title>
     <PackageVersion>3.0.$(VersionSuffix)</PackageVersion>
     <Authors>Ondrej Morsky</Authors>
-    <Description>JSON Merge Patch support for ASP.NET Core 3.X (Base Package)</Description>
+    <Description>JSON Merge Patch support for ASP.NET Core 3.X (Newtonsoft.Json)</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
     <Copyright>Copyright 2019 (c). All rights reserved.</Copyright>
-    <PackageTags>ASP.NET Core;JSON Merge Patch;RFC 7396</PackageTags>
+    <PackageTags>ASP.NET Core;JSON Merge Patch;RFC 7396;Newtonsoft.Json</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
     <!--Nuget source + SourceLink-->
@@ -27,8 +27,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="3.0.0-preview6.19307.2" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19270-01" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-preview6.19307.2" />
+    <ProjectReference Include="..\3.0-JsonMergePatch\3.0-JsonMergePatch.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Internal\" />
   </ItemGroup>
 
 </Project>

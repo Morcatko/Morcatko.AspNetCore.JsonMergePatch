@@ -1,7 +1,7 @@
-﻿using Morcatko.AspNetCore.JsonMergePatch.Builder;
+﻿using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders;
 using Xunit;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Patching
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Patching
 {
 	public class PatchTests
 	{

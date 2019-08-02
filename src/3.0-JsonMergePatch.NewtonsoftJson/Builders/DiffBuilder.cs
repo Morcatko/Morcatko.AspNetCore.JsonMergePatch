@@ -1,8 +1,8 @@
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Builders
+namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders
 {
 	public static class DiffBuilder
 	{

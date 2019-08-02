@@ -1,8 +1,8 @@
-﻿using Morcatko.AspNetCore.JsonMergePatch.Builders;
+﻿using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Builders.Diff
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Builders.Diff
 {
 	public class Flat
 	{

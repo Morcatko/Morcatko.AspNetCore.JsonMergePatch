@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Integration.Server
 {
 	class MvcStartup
 	{

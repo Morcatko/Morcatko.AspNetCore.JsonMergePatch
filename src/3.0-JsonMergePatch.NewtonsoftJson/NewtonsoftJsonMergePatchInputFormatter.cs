@@ -70,7 +70,6 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 
 			return new NewtonsoftJsonMergePatchSerializer(
 				container,
-				jsonMergePatchType,
 				modelType,
 				base.CreateJsonSerializer(),
 				SerializerSettings,

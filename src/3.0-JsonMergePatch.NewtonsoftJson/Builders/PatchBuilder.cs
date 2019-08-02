@@ -1,11 +1,10 @@
-
-using Morcatko.AspNetCore.JsonMergePatch.Builders;
+﻿using Morcatko.AspNetCore.JsonMergePatch.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Reflection;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Builder
+namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders
 {
 	public class PatchBuilder<TModel> where TModel : class
 	{
@@ -35,9 +34,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Builder
 
 		#region PatchCreation methods
 		private static JsonMergePatchDocument<TModel> CreatePatchDocument<TModel>(JObject patchObject, JsonSerializer jsonSerializer, JsonMergePatchOptions options) where TModel : class
-			=> CreatePatchDocument(typeof(JsonMergePatchDocument<TModel>), typeof(TModel), patchObject, jsonSerializer, options) as JsonMergePatchDocument<TModel>;
+			=> CreatePatchDocument(typeof(TModel), patchObject, jsonSerializer, options) as JsonMergePatchDocument<TModel>;
 
-		private static void AddOperation(JsonMergePatchDocument jsonMergePatchDocument, string pathPrefix, JObject patchObject, JsonMergePatchOptions options)
+		private static void AddOperation(IInternalJsonMergePatchDocument jsonMergePatchDocument, string pathPrefix, JObject patchObject, JsonMergePatchOptions options)
 		{
 			foreach (var jProperty in patchObject)
 			{
@@ -46,7 +45,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Builder
 				{
 					if (options.EnableDelete && jValue.Value == null)
 						jsonMergePatchDocument.AddOperation_Remove(path);
-					else 
+					else
 						jsonMergePatchDocument.AddOperation_Replace(path, jValue.Value);
 				}
 				else if (jProperty.Value is JArray jArray)
@@ -59,10 +58,13 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Builder
 			}
 		}
 
-		internal static JsonMergePatchDocument CreatePatchDocument(Type jsonMergePatchType, Type modelType, JObject patchObject, JsonSerializer jsonSerializer, JsonMergePatchOptions options)
+		static readonly Type internalJsonMergePatchDocumentType = typeof(InternalJsonMergePatchDocument<>);
+		internal static IInternalJsonMergePatchDocument CreatePatchDocument(Type modelType, JObject patchObject, JsonSerializer jsonSerializer, JsonMergePatchOptions options)
 		{
+			var jsonMergePatchType = internalJsonMergePatchDocumentType.MakeGenericType(modelType);
 			var model = patchObject.ToObject(modelType, jsonSerializer);
-			var jsonMergePatchDocument = (JsonMergePatchDocument)Activator.CreateInstance(jsonMergePatchType, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { model }, null);
+
+			var jsonMergePatchDocument = (IInternalJsonMergePatchDocument)Activator.CreateInstance(jsonMergePatchType, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { model }, null);
 			AddOperation(jsonMergePatchDocument, "/", patchObject, options);
 			return jsonMergePatchDocument;
 		}
