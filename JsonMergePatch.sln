@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2.1-testApp", "src\2.1-test
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.0", "3.0", "{45C8140C-AC7A-429F-8B2E-BD8574535B15}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "3.0-JsonMergePatch", "src\3.0-JsonMergePatch\3.0-JsonMergePatch.csproj", "{C689A76A-7648-49E1-A315-0F45318A1946}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "3.0-JsonMergePatch.Document", "src\3.0-JsonMergePatch.Document\3.0-JsonMergePatch.Document.csproj", "{C689A76A-7648-49E1-A315-0F45318A1946}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "3.0-JsonMergePatch.Tests", "src\3.0-JsonMergePatch.Tests\3.0-JsonMergePatch.Tests.csproj", "{7A51A5A0-D8FD-47AA-86AE-6E5958E5490D}"
 EndProject

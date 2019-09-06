@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
-    <AssemblyName>Morcatko.AspNetCore.JsonMergePatch</AssemblyName>
+    <AssemblyName>Morcatko.AspNetCore.JsonMergePatch.Document</AssemblyName>
     <RootNamespace>Morcatko.AspNetCore.JsonMergePatch</RootNamespace>
     <VersionSuffix Condition=" '$(VersionSuffix)'=='' ">0</VersionSuffix>
 
-    <PackageId>Morcatko.AspNetCore.JsonMergePatch</PackageId>
+    <PackageId>Morcatko.AspNetCore.JsonMergePatch.Document</PackageId>
     <Title>JSON Merge Patch for ASP.NET Core 3.x (Base Package)</Title>
     <PackageVersion>3.0.$(VersionSuffix)</PackageVersion>
     <Authors>Ondrej Morsky</Authors>
