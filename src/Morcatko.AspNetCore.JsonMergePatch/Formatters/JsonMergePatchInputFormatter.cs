@@ -73,7 +73,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 					var jsonSerializer = CreateJsonSerializer();
 					try
 					{
-						var jToken = await JToken.LoadAsync(jsonReader);
+						var jToken = jsonSerializer.Deserialize<JToken>(jsonReader);
 
 						switch (jToken)
 						{

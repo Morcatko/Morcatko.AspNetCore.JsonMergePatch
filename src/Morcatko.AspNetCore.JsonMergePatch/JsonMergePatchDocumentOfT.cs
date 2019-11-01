@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Morcatko.AspNetCore.JsonMergePatch.Builder;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -29,8 +30,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 		public static JsonMergePatchDocument<TModel> Build<TModel>(JObject jsonObject) where TModel : class
 			=> new PatchBuilder<TModel>().Build(jsonObject);
 
-		public static JsonMergePatchDocument<TModel> Build<TModel>(string jsonObject) where TModel : class
-			=> new PatchBuilder<TModel>().Build(jsonObject);
+		public static JsonMergePatchDocument<TModel> Build<TModel>(string jsonObject, JsonSerializerSettings serializerSettings = null) where TModel : class
+			=> new PatchBuilder<TModel>().Build(jsonObject, serializerSettings);
 	}
 
 	public class JsonMergePatchDocument<TModel> : JsonMergePatchDocument where TModel : class

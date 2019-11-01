@@ -12,6 +12,8 @@
 *.suo
 *.user
 
+# VSCode
+/.ionide
 
 # Build results
 [Dd]ebug/
