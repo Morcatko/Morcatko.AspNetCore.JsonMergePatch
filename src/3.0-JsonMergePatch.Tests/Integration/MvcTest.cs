@@ -36,6 +36,24 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 
 		[Theory]
 		[MemberData(nameof(GetCombinations))]
+		public async Task PatchString(bool core, bool newtonsoft)
+		{
+			using (var server = Helper.CreateServer(core, newtonsoft))
+			{
+				await server.PostAsync("api/data/0", GetTestModel());
+				
+				await server.MergePatchAsync("api/data/0", 
+					new { String= "changed string" });
+
+				var patchedModel = await server.GetAsync<TestModel>("api/data/0");
+				var expected = GetTestModel();
+				expected.String = "changed string";
+				Assert.Equal(expected, patchedModel);
+			}
+		}
+
+		[Theory]
+		[MemberData(nameof(GetCombinations))]
 		public async Task PatchIntegers(bool core, bool newtonsoft)
 		{
 			using (var server = Helper.CreateServer(core, newtonsoft))
@@ -78,23 +96,12 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 
 				var dateTime = new DateTimeOffset(2019, 10, 29, 9, 38, 0, 0, TimeSpan.FromHours(2));
 
-				await server.MergePatchAsync("api/data", new[]
-				{
-					new { id = 1, date = dateTime },
-					new { id = 2, date = dateTime.AddDays(15) }
-				});
+				await server.MergePatchAsync("api/data/2", 
+					new { date = dateTime.AddDays(15) }
+				);
 
-				var patchedModel = await server.GetAsync<TestModel>("api/data/0");
+				var patchedModel = await server.GetAsync<TestModel>("api/data/2");
 				var expected = GetTestModel();
-				Assert.Equal(expected, patchedModel);
-
-				patchedModel = await server.GetAsync<TestModel>("api/data/1");
-				expected = GetTestModel();
-				expected.Date = dateTime;
-				Assert.Equal(expected, patchedModel);
-
-				patchedModel = await server.GetAsync<TestModel>("api/data/2");
-				expected = GetTestModel();
 				expected.Date = dateTime.AddDays(15);
 				Assert.Equal(expected, patchedModel);
 			}
