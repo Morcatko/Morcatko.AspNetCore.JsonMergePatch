@@ -10,7 +10,12 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
 		{
 			services
 				.AddMvc()
-				.AddJsonMergePatch();
+                .AddJsonOptions(settings => {
+                    settings.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+                    settings.SerializerSettings.DateParseHandling = Newtonsoft.Json.DateParseHandling.DateTimeOffset;
+                    settings.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
+                })
+                .AddJsonMergePatch();
 			services.AddSingleton<IRepository, Repository>();
 		}
 
@@ -26,7 +31,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
 		{
 			services
 				.AddMvcCore()
-				.AddJsonMergePatch();
+                
+                .AddJsonMergePatch();
 			services.AddSingleton<IRepository, Repository>();
 		}
 
