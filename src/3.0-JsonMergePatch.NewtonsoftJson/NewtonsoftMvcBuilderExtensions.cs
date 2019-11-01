@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson;
-using Newtonsoft.Json;
 using System;
 
 namespace Morcatko.AspNetCore.JsonMergePatch

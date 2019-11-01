@@ -43,7 +43,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson
 		{
 			SupportedMediaTypes.Clear();
 			SupportedMediaTypes.Add(JsonMergePatchMediaType);
-
+			
 			_logger = logger;
 			_charPool = new JsonArrayPool<char>(charPool);
 			_mvcOptions = mvcOptions;
@@ -51,7 +51,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson
 			_jsonMergePatchOptions = jsonMergePatchOptions;
 		}
 
-		private static bool ContainerIsIEnumerable(InputFormatterContext context) => context.ModelType.IsGenericType && (context.ModelType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+		private static bool ContainerIsIEnumerable(InputFormatterContext context)
+			=> context.ModelType.IsGenericType && (context.ModelType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
 #warning TODO - Pooling (was not implemented in v2 either)
 		private new NewtonsoftJsonMergePatchSerializer CreateJsonSerializer(InputFormatterContext context)

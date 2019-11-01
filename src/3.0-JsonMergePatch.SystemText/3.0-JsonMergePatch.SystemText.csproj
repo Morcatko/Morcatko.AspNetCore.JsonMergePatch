@@ -27,6 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
     <ProjectReference Include="..\3.0-JsonMergePatch.Document\3.0-JsonMergePatch.Document.csproj" />
   </ItemGroup>
 </Project>
