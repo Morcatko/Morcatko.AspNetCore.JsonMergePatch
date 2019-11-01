@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using System.Linq;
 
-namespace Morcatko.AspNetCore.JsonMergePatch
+namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson
 {
 	class NewtonsoftJsonMergePatchSerializer : JsonSerializer
 	{
@@ -14,7 +14,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 		private readonly Type _innerModelType;
 		private readonly JsonSerializerSettings _serializerSettings;
 		private readonly JsonMergePatchOptions _jsonMergePatchOptions;
-		private readonly JsonSerializer _innerjsonSerializer;
+		private readonly JsonSerializer _innerJsonSerializer;
 
 		public NewtonsoftJsonMergePatchSerializer(
 			IList listContainer,
@@ -27,7 +27,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 			_innerModelType = innerModelType;
 			_serializerSettings = serializerSettings;
 			_jsonMergePatchOptions = jsonMergePatchOptions;
-			_innerjsonSerializer = innerJsonSerializer;
+			_innerJsonSerializer = innerJsonSerializer;
 		}
 
 		private IInternalJsonMergePatchDocument CreatePatchDocument(JObject jObject, JsonSerializer jsonSerializer)
@@ -39,7 +39,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 
 		public new object Deserialize(JsonReader reader, Type objectType)
 		{
-			var jToken = JToken.Load(reader);
+			var jToken =  _innerJsonSerializer.Deserialize<JToken>(reader);
 
 			switch (jToken)
 			{
@@ -47,14 +47,14 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 					if (_listContainer != null)
 						throw new ArgumentException("Received object when array was expected"); //This could be handled by returnin list with single item
 
-					return CreatePatchDocument(jObject, _innerjsonSerializer);
+					return CreatePatchDocument(jObject, _innerJsonSerializer);
 				case JArray jArray:
 					if (_listContainer == null)
 						throw new ArgumentException("Received array when object was expected");
 
 					foreach (var jObject in jArray.OfType<JObject>())
 					{
-						_listContainer.Add(CreatePatchDocument(jObject, _innerjsonSerializer));
+						_listContainer.Add(CreatePatchDocument(jObject, _innerJsonSerializer));
 					}
 					return _listContainer;
 			}

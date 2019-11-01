@@ -9,7 +9,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders
 	public class PatchBuilder<TModel> where TModel : class
 	{
 		public JsonMergePatchDocument<TModel> Build(TModel original, TModel patched) => PatchBuilder.Build<TModel>(original, patched);
-		public JsonMergePatchDocument<TModel> Build(string jsonObjectPatch) => PatchBuilder.Build<TModel>(jsonObjectPatch);
+		public JsonMergePatchDocument<TModel> Build(string jsonObjectPatch, JsonSerializerSettings serializerSettings = null) => PatchBuilder.Build<TModel>(jsonObjectPatch, serializerSettings);
 		public JsonMergePatchDocument<TModel> Build(object jsonObjectPatch) => PatchBuilder.Build<TModel>(jsonObjectPatch);
 		public JsonMergePatchDocument<TModel> Build(JObject jsonObjectPatch) => PatchBuilder.Build<TModel>(jsonObjectPatch);
 	}
@@ -22,8 +22,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders
 		public static JsonMergePatchDocument<TModel> Build<TModel>(TModel original, TModel patched, JsonMergePatchOptions options = null) where TModel : class
 			=> Build<TModel>(DiffBuilder.Build(original, patched) ?? new JObject(), options);
 
-		public static JsonMergePatchDocument<TModel> Build<TModel>(string jsonObjectPatch, JsonMergePatchOptions options = null) where TModel : class
-			=> Build<TModel>(JObject.Parse(jsonObjectPatch), options);
+		public static JsonMergePatchDocument<TModel> Build<TModel>(string jsonObjectPatch, JsonSerializerSettings serializerSettings = null, JsonMergePatchOptions options = null) where TModel : class
+			=> Build<TModel>(JsonConvert.DeserializeObject<JObject>(jsonObjectPatch, serializerSettings), options);
 
 		public static JsonMergePatchDocument<TModel> Build<TModel>(object jsonObjectPatch, JsonMergePatchOptions options = null) where TModel : class
 			=> Build<TModel>(JObject.FromObject(jsonObjectPatch), options);

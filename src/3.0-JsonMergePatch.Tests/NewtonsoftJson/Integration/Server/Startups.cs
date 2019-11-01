@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Integration.Server
 {
@@ -9,6 +10,12 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Integration.Se
 		{
 			services
 				.AddMvc()
+				.AddNewtonsoftJson(o =>
+				{
+					o.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+					o.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+					o.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+				})
 				.AddNewtonsoftJsonMergePatch();
 
 			services.AddSingleton<IRepository, Repository>();
@@ -27,6 +34,12 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Integration.Se
 		{
 			services
 				.AddMvcCore()
+				.AddNewtonsoftJson(o =>
+				{
+					o.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+					o.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+					o.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+				})
 				.AddNewtonsoftJsonMergePatch();
 			services.AddSingleton<IRepository, Repository>();
 		}

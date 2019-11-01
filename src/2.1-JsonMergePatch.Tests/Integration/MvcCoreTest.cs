@@ -56,37 +56,37 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 			}
 		}
 
-        [Fact]
-        public async Task PatchDateTimeOffset()
-        {
-            using (var server = Helper.CreateMvcServer())
-            {
-                await server.PostAsync("api/data/0", GetTestModel());
-                await server.PostAsync("api/data/1", GetTestModel());
-                await server.PostAsync("api/data/2", GetTestModel());
+		[Fact]
+		public async Task PatchDateTimeOffset()
+		{
+			using (var server = Helper.CreateMvcServer())
+			{
+				await server.PostAsync("api/data/0", GetTestModel());
+				await server.PostAsync("api/data/1", GetTestModel());
+				await server.PostAsync("api/data/2", GetTestModel());
 
-                var dateTime = new DateTimeOffset(2019, 10, 29, 9, 38, 0, 0, TimeSpan.FromHours(2));
+				var dateTime = new DateTimeOffset(2019, 10, 29, 9, 38, 0, 0, TimeSpan.FromHours(2));
 
-                await server.MergePatchAsync("api/data", new[]
-                {
-                    new { id = 1, date = dateTime },
-                    new { id = 2, date = dateTime.AddDays(15) }
-                });
+				await server.MergePatchAsync("api/data", new[]
+				{
+					new { id = 1, date = dateTime },
+					new { id = 2, date = dateTime.AddDays(15) }
+				});
 
-                var patchedModel = await server.GetAsync<TestModel>("api/data/0");
-                var expected = GetTestModel();
-                Assert.Equal(expected, patchedModel);
+				var patchedModel = await server.GetAsync<TestModel>("api/data/0");
+				var expected = GetTestModel();
+				Assert.Equal(expected, patchedModel);
 
-                patchedModel = await server.GetAsync<TestModel>("api/data/1");
-                expected = GetTestModel();
-                expected.Date = dateTime;
-                Assert.Equal(expected, patchedModel);
+				patchedModel = await server.GetAsync<TestModel>("api/data/1");
+				expected = GetTestModel();
+				expected.Date = dateTime;
+				Assert.Equal(expected, patchedModel);
 
-                patchedModel = await server.GetAsync<TestModel>("api/data/2");
-                expected = GetTestModel();
-                expected.Date = dateTime.AddDays(15);
-                Assert.Equal(expected, patchedModel);
-            }
-        }
-    }
+				patchedModel = await server.GetAsync<TestModel>("api/data/2");
+				expected = GetTestModel();
+				expected.Date = dateTime.AddDays(15);
+				Assert.Equal(expected, patchedModel);
+			}
+		}
+	}
 }

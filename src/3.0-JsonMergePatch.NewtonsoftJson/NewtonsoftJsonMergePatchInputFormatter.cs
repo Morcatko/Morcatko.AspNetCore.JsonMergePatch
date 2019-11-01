@@ -17,7 +17,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Morcatko.AspNetCore.JsonMergePatch
+namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson
 {
 	internal class NewtonsoftJsonMergePatchInputFormatter : NewtonsoftJsonInputFormatter
 	{

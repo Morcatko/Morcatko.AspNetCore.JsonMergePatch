@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson;
+using Newtonsoft.Json;
 using System;
 
 namespace Morcatko.AspNetCore.JsonMergePatch
@@ -17,14 +19,12 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 
 		public static IMvcBuilder AddNewtonsoftJsonMergePatch(this IMvcBuilder builder, Action<JsonMergePatchOptions> configure = null)
 		{
-			builder.AddNewtonsoftJson();
 			builder.Services.AddNewtonsoftJsonMergePatch(configure);
 			return builder;
 		}
 
 		public static IMvcCoreBuilder AddNewtonsoftJsonMergePatch(this IMvcCoreBuilder builder, Action<JsonMergePatchOptions> configure = null)
 		{
-			builder.AddNewtonsoftJson();
 			builder.Services.AddNewtonsoftJsonMergePatch(configure);
 			return builder;
 		}

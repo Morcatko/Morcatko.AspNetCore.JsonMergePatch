@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Buffers;
 
-namespace Morcatko.AspNetCore.JsonMergePatch
+namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson
 {
 	class NewtonsoftJsonMergePatchOptionsSetup : IConfigureOptions<MvcOptions>
 	{

@@ -25,6 +25,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 		[JsonConverter(typeof(StringEnumConverter))]
 		public ValueEnum ValueEnum { get; set; }
 
+		public DateTimeOffset? Date { get; set; }
+
 		public bool Equals(TestModel other)
 		{
 			//We are not comparing Id
@@ -35,6 +37,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 				&& this.Renamed == other.Renamed
 				&& this.SimpleEnum == other.SimpleEnum
 				&& this.ValueEnum == other.ValueEnum
+				&& this.Date == other.Date
+				&& this.Date.GetValueOrDefault().Offset == other.Date.GetValueOrDefault().Offset
 				&& Enumerable.SequenceEqual(this.SubModels?.Keys, other.SubModels?.Keys)
 				&& Enumerable.SequenceEqual(this.SubModels?.Values, other.SubModels?.Values)
 				&& ((this.SubModel == other.SubModel)
