@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Morcatko.AspNetCore.JsonMergePatch;
-using Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Integration.Server;
+using Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server;
 
 namespace testApp
 {

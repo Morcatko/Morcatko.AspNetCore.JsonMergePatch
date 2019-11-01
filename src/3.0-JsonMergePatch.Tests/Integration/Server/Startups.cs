@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
 {
@@ -11,9 +11,10 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
 			services.AddSingleton<IRepository, Repository>();
 		}
 
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app)
 		{
-			app.UseMvc();
+			app.UseRouting();
+			app.UseEndpoints(e => e.MapControllers());
 		}
 	}
 }

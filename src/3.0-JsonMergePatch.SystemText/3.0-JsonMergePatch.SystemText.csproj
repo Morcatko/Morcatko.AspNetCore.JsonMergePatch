@@ -2,19 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RootNamespace>Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson</RootNamespace>
-    <AssemblyName>Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson</AssemblyName>
+    <RootNamespace>Morcatko.AspNetCore.JsonMergePatch.SystemText</RootNamespace>
+    <AssemblyName>Morcatko.AspNetCore.JsonMergePatch.SystemText</AssemblyName>
     <VersionSuffix Condition=" '$(VersionSuffix)'=='' ">0</VersionSuffix>
 
-    <PackageId>Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson</PackageId>
-    <Title>JSON Merge Patch for ASP.NET Core 3.x (Newtonsoft.Json)</Title>
+    <PackageId>Morcatko.AspNetCore.JsonMergePatch.SystemText</PackageId>
+    <Title>JSON Merge Patch for ASP.NET Core 3.x (System.Text)</Title>
     <PackageVersion>3.0.$(VersionSuffix)</PackageVersion>
     <Authors>Ondrej Morsky</Authors>
-    <Description>JSON Merge Patch support for ASP.NET Core 3.X (Newtonsoft.Json)</Description>
+    <Description>JSON Merge Patch support for ASP.NET Core 3.X (System.Text)</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
     <Copyright>Copyright 2019 (c). All rights reserved.</Copyright>
-    <PackageTags>ASP.NET Core;JSON Merge Patch;RFC 7396;Newtonsoft.Json</PackageTags>
+    <PackageTags>ASP.NET Core;JSON Merge Patch;RFC 7396;System.Text</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
     <!--Nuget source + SourceLink-->
@@ -27,8 +27,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
     <ProjectReference Include="..\3.0-JsonMergePatch.Document\3.0-JsonMergePatch.Document.csproj" />
   </ItemGroup>
-
 </Project>

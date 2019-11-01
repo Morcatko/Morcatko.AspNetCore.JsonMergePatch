@@ -1,26 +1,56 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Integration.Server;
+using Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Integration
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 {
 	static class Helper
 	{
-		public static TestServer CreateServer<TStartup>(Action<JsonMergePatchOptions> configure = null) where TStartup : class
-			=> new TestServer(new WebHostBuilder()
-				.ConfigureServices(services => services.Configure(configure ?? (_ => { })))
-				.UseStartup<TStartup>());
+		public static TestServer CreateServer(bool core, bool newtonsoft)
+		{
+			void ConfigureNewtonsoft(MvcNewtonsoftJsonOptions o)
+			{
+				o.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+				o.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+				o.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+			}
 
-		public static TestServer CreateMvcServer(Action<JsonMergePatchOptions> configure = null)
-			=> CreateServer<MvcStartup>(configure);
-		public static TestServer CreateMvcCoreServer(Action<JsonMergePatchOptions> configure = null)
-			=> CreateServer<MvcCoreStartup>(configure);
+
+			return new TestServer(new WebHostBuilder()
+				.ConfigureServices(services =>
+				{
+					if (core)
+					{
+						var builder = services.AddMvcCore();
+						if (newtonsoft)
+							builder
+								.AddNewtonsoftJson(ConfigureNewtonsoft)
+								.AddNewtonsoftJsonMergePatch();
+						else
+							throw new NotSupportedException();
+						//builder.AddSystemTextJsonMergePatch();
+					}
+					else
+					{
+						var builder = services.AddMvc();
+						if (newtonsoft)
+							builder
+								.AddNewtonsoftJson(ConfigureNewtonsoft)
+								.AddNewtonsoftJsonMergePatch();
+						else
+							throw new NotSupportedException();
+						//builder.AddSystemTextJsonMergePatch();
+					}
+				})
+				.UseStartup<Startup>());
+		}
 
 		public static HttpContent HttpContent(object data, string contentType)
 		{

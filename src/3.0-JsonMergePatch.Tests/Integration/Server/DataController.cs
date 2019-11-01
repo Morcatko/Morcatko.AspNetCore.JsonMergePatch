@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Integration.Server
+namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
 {
 	[Route("api/[controller]")]
 	public class DataController : Controller

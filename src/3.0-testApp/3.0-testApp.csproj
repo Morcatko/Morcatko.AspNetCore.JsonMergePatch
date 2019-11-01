@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\3.0-JsonMergePatch.Tests\NewtonsoftJson\Integration\Server\DataController.cs" Link="Server\DataController.cs" />
-    <Compile Include="..\3.0-JsonMergePatch.Tests\NewtonsoftJson\Integration\Server\Repository.cs" Link="Server\Repository.cs" />
+    <Compile Include="..\3.0-JsonMergePatch.Tests\Integration\Server\DataController.cs" Link="Server\DataController.cs" />
+    <Compile Include="..\3.0-JsonMergePatch.Tests\Integration\Server\Repository.cs" Link="Server\Repository.cs" />
     <Compile Include="..\3.0-JsonMergePatch.Tests\TestModel.cs" Link="Server\TestModel.cs" />
   </ItemGroup>
 

@@ -28,15 +28,17 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 
 		public static IEnumerable<object[]> GetCombinations()
 		{
-			yield return new object[] { false };
-			yield return new object[] { true };
+			//yield return new object[] { false, false };
+			yield return new object[] { false, true };
+			//yield return new object[] { true, false };
+			yield return new object[] { true, true };
 		}
 
 		[Theory]
 		[MemberData(nameof(GetCombinations))]
-		public async Task PatchIntegers(bool core)
+		public async Task PatchIntegers(bool core, bool newtonsoft)
 		{
-			using (var server = Helper.CreateServer(core))
+			using (var server = Helper.CreateServer(core, newtonsoft))
 			{
 				await server.PostAsync("api/data/0", GetTestModel());
 				await server.PostAsync("api/data/1", GetTestModel());
@@ -66,9 +68,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 
 		[Theory]
 		[MemberData(nameof(GetCombinations))]
-		public async Task PatchDateTimeOffset(bool core)
+		public async Task PatchDateTimeOffset(bool core, bool newtonsoft)
 		{
-			using (var server = Helper.CreateServer(core))
+			using (var server = Helper.CreateServer(core, newtonsoft))
 			{
 				await server.PostAsync("api/data/0", GetTestModel());
 				await server.PostAsync("api/data/1", GetTestModel());
@@ -100,9 +102,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 
 		[Theory(Skip = "Does not work")]
 		[MemberData(nameof(GetCombinations))]
-		public async Task MissingRequiredProperty(bool core)
+		public async Task MissingRequiredProperty(bool core, bool newtonsoft)
 		{
-			using (var server = Helper.CreateServer(core))
+			using (var server = Helper.CreateServer(core, newtonsoft))
 			{
 				await server.PostAsync("api/data/0", GetTestModel());
 
@@ -117,9 +119,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 		#region ValueEnum
 		[Theory(Skip = "Enums do not work - https://github.com/aspnet/Home/issues/2423")]
 		[MemberData(nameof(GetCombinations))]
-		public async Task PatchValueEnum(bool core)
+		public async Task PatchValueEnum(bool core, bool newtonsoft)
 		{
-			using (var server = Helper.CreateServer(core))
+			using (var server = Helper.CreateServer(core, newtonsoft))
 			{
 				await server.PostAsync("api/data/0", GetTestModel());
 
@@ -133,9 +135,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 
 		[Theory(Skip = "JsonPatch (not merge) fails as well - https://github.com/aspnet/Home/issues/2423")]
 		[MemberData(nameof(GetCombinations))]
-		public async Task JsonPatchValueEnum(bool core)
+		public async Task JsonPatchValueEnum(bool core, bool newtonsoft)
 		{
-			using (var server = Helper.CreateServer(core))
+			using (var server = Helper.CreateServer(core, newtonsoft))
 			{
 				await server.PostAsync("api/data/0", GetTestModel());
 				await server.JsonPatchAsync("api/data/0", new[] { new { op = "replace", path = "/valueEnum", value = "Feet" } });
@@ -144,9 +146,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 
 		[Theory]
 		[MemberData(nameof(GetCombinations))]
-		public async Task PostValueEnum(bool core)
+		public async Task PostValueEnum(bool core, bool newtonsoft)
 		{
-			using (var server = Helper.CreateServer(core))
+			using (var server = Helper.CreateServer(core, newtonsoft))
 			{
 				await server.PostAsync("api/data/0", new { valueEnum = "Feet" });
 			}
