@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.Mvc.Formatters.Json.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.Net.Http.Headers;
@@ -19,8 +19,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 	internal class JsonMergePatchInputFormatter : JsonInputFormatter
 	{
 		private static readonly MediaTypeHeaderValue JsonMergePatchMediaType = MediaTypeHeaderValue.Parse(JsonMergePatchDocument.ContentType).CopyAsReadOnly();
-
-		private readonly IArrayPool<char> _charPool;
+		private readonly Lazy<ModelMetadata> _modelMetadata;
 		private readonly JsonMergePatchOptions _options;
 
 		public JsonMergePatchInputFormatter(
@@ -28,17 +27,18 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 			JsonSerializerSettings serializerSettings,
 			ArrayPool<char> charPool,
 			ObjectPoolProvider objectPoolProvider,
+			Lazy<IModelMetadataProvider> lazyModelMetadataProvider,
 			JsonMergePatchOptions options)
 			: base(logger, serializerSettings, charPool, objectPoolProvider)
 		{
-			this._charPool = new JsonArrayPool<char>(charPool);
-
 			SupportedMediaTypes.Clear();
 			SupportedMediaTypes.Add(JsonMergePatchMediaType);
-			this._options = options;
+			_modelMetadata = new Lazy<ModelMetadata>(() => lazyModelMetadataProvider.Value.GetMetadataForType(typeof(JToken)));
+			_options = options;
 		}
 
-		private static bool ContainerIsIEnumerable(InputFormatterContext context) => context.ModelType.IsGenericType && (context.ModelType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+		private static bool ContainerIsIEnumerable(InputFormatterContext context)
+			=> context.ModelType.IsGenericType && (context.ModelType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
 		private JsonMergePatchDocument CreatePatchDocument(Type jsonMergePatchType, Type modelType, JObject jObject, JsonSerializer jsonSerializer)
 		{
@@ -49,65 +49,65 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 
 		public async override Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
 		{
-			var request = context.HttpContext.Request;
-			using (var streamReader = context.ReaderFactory(request.Body, encoding))
+			var jsonMergePatchType = context.ModelType;
+			var container = (IList)null;
+
+			if (ContainerIsIEnumerable(context))
 			{
-				using (var jsonReader = new JsonTextReader(streamReader))
+				jsonMergePatchType = context.ModelType.GenericTypeArguments[0];
+				var listType = typeof(List<>);
+				var constructedListType = listType.MakeGenericType(jsonMergePatchType);
+				container = (IList)Activator.CreateInstance(constructedListType);
+			}
+			var modelType = jsonMergePatchType.GenericTypeArguments[0];
+
+
+			var patchContext = new InputFormatterContext(
+				context.HttpContext,
+				context.ModelName,
+				context.ModelState,
+				_modelMetadata.Value,
+				context.ReaderFactory,
+				context.TreatEmptyInputAsDefaultValue);
+
+			var jTokenResult = await base.ReadRequestBodyAsync(patchContext, encoding);
+
+			if (jTokenResult.HasError)
+				return jTokenResult;
+
+			var serializer = base.CreateJsonSerializer();
+			try
+			{
+
+				switch (jTokenResult.Model)
 				{
-					jsonReader.ArrayPool = _charPool;
-					jsonReader.CloseInput = false;
+					case JObject jObject:
+						if (container != null)
+							throw new ArgumentException("Received object when array was expected"); //This could be handled by returning list with single item
 
-					var jsonMergePatchType = context.ModelType;
-					var container = (IList)null;
+						var jsonMergePatchDocument = CreatePatchDocument(jsonMergePatchType, modelType, jObject, serializer);
+						return await InputFormatterResult.SuccessAsync(jsonMergePatchDocument);
+					case JArray jArray:
+						if (container == null)
+							throw new ArgumentException("Received array when object was expected");
 
-					if (ContainerIsIEnumerable(context))
-					{
-						jsonMergePatchType = context.ModelType.GenericTypeArguments[0];
-						var listType = typeof(List<>);
-						var constructedListType = listType.MakeGenericType(jsonMergePatchType);
-						container = (IList)Activator.CreateInstance(constructedListType);
-					}
-					var modelType = jsonMergePatchType.GenericTypeArguments[0];
-
-
-					var jsonSerializer = CreateJsonSerializer();
-					try
-					{
-						var jToken = jsonSerializer.Deserialize<JToken>(jsonReader);
-
-						switch (jToken)
+						foreach (var jObject in jArray.OfType<JObject>())
 						{
-							case JObject jObject:
-								if (container != null)
-									throw new ArgumentException("Received object when array was expected"); //This could be handled by returnin list with single item
-
-								var jsonMergePatchDocument = CreatePatchDocument(jsonMergePatchType, modelType, jObject, jsonSerializer);
-								return await InputFormatterResult.SuccessAsync(jsonMergePatchDocument);
-							case JArray jArray:
-								if (container == null)
-									throw new ArgumentException("Received array when object was expected");
-
-								foreach (var jObject in jArray.OfType<JObject>())
-								{
-									container.Add(CreatePatchDocument(jsonMergePatchType, modelType, jObject, jsonSerializer));
-								}
-								return await InputFormatterResult.SuccessAsync(container);
+							container.Add(CreatePatchDocument(jsonMergePatchType, modelType, jObject, serializer));
 						}
-
-						return await InputFormatterResult.FailureAsync();
-
-					}
-					catch (Exception ex)
-					{
-						context.ModelState.TryAddModelError(context.ModelName, ex.Message);
-						return await InputFormatterResult.FailureAsync();
-					}
-					finally
-					{
-						ReleaseJsonSerializer(jsonSerializer);
-					}
+						return await InputFormatterResult.SuccessAsync(container);
 				}
 			}
+			catch (Exception e)
+			{
+				throw;
+			}
+			finally
+			{
+				base.ReleaseJsonSerializer(serializer);
+			}
+
+			return InputFormatterResult.Failure();
 		}
 
 
