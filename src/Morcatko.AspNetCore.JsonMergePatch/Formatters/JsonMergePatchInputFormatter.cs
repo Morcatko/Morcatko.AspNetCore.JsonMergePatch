@@ -18,6 +18,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 {
 	internal class JsonMergePatchInputFormatter : JsonInputFormatter
 	{
+		private static readonly Type _listType = typeof(List<>);
 		private static readonly MediaTypeHeaderValue JsonMergePatchMediaType = MediaTypeHeaderValue.Parse(JsonMergePatchDocument.ContentType).CopyAsReadOnly();
 		private readonly Lazy<ModelMetadata> _modelMetadata;
 		private readonly JsonMergePatchOptions _options;
@@ -47,6 +48,29 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 			return jsonMergePatchDocument;
 		}
 
+		private object ConvertToPatch(object o, IList container, Type jsonMergePatchType, Type modelType, JsonSerializer serializer)
+		{
+			switch (o)
+			{
+				case JObject jObject:
+					if (container != null)
+						throw new ArgumentException("Received object when array was expected"); //This could be handled by returning list with single item
+
+					return CreatePatchDocument(jsonMergePatchType, modelType, jObject, serializer);
+				case JArray jArray:
+					if (container == null)
+						throw new ArgumentException("Received array when object was expected");
+
+					foreach (var jObject in jArray.OfType<JObject>())
+					{
+						container.Add(CreatePatchDocument(jsonMergePatchType, modelType, jObject, serializer));
+					}
+					return container;
+				default:
+					throw new NotSupportedException($"Unsupported type '{o?.GetType()}'");
+			}
+		}
+
 		public async override Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
 		{
 			var jsonMergePatchType = context.ModelType;
@@ -54,9 +78,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 
 			if (ContainerIsIEnumerable(context))
 			{
-				jsonMergePatchType = context.ModelType.GenericTypeArguments[0];
-				var listType = typeof(List<>);
-				var constructedListType = listType.MakeGenericType(jsonMergePatchType);
+				jsonMergePatchType = jsonMergePatchType.GenericTypeArguments[0];
+				var constructedListType = _listType.MakeGenericType(jsonMergePatchType);
 				container = (IList)Activator.CreateInstance(constructedListType);
 			}
 			var modelType = jsonMergePatchType.GenericTypeArguments[0];
@@ -78,45 +101,20 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 			var serializer = base.CreateJsonSerializer();
 			try
 			{
-
-				switch (jTokenResult.Model)
-				{
-					case JObject jObject:
-						if (container != null)
-							throw new ArgumentException("Received object when array was expected"); //This could be handled by returning list with single item
-
-						var jsonMergePatchDocument = CreatePatchDocument(jsonMergePatchType, modelType, jObject, serializer);
-						return await InputFormatterResult.SuccessAsync(jsonMergePatchDocument);
-					case JArray jArray:
-						if (container == null)
-							throw new ArgumentException("Received array when object was expected");
-
-						foreach (var jObject in jArray.OfType<JObject>())
-						{
-							container.Add(CreatePatchDocument(jsonMergePatchType, modelType, jObject, serializer));
-						}
-						return await InputFormatterResult.SuccessAsync(container);
-				}
-			}
-			catch (Exception e)
-			{
-				throw;
+				var result = ConvertToPatch(jTokenResult.Model, container, jsonMergePatchType, modelType, serializer);
+				return InputFormatterResult.Success(result);
 			}
 			finally
 			{
 				base.ReleaseJsonSerializer(serializer);
 			}
-
-			return InputFormatterResult.Failure();
 		}
 
 
 		public override bool CanRead(InputFormatterContext context)
 		{
 			if (context == null)
-			{
 				throw new ArgumentNullException(nameof(context));
-			}
 
 			var jsonMergePatchType = context.ModelType;
 

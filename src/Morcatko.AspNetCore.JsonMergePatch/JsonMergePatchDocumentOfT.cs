@@ -44,7 +44,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 		private readonly Type _modelType = typeof(TModel);
 		private readonly JsonPatchDocument<TModel> _jsonPatchDocument = new JsonPatchDocument<TModel>();
 
-		public TModel Model { get; internal set; }
+		public TModel Model { get; private set; }
 
 		public override IContractResolver ContractResolver
 		{
