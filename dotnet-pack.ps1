@@ -1,5 +1,5 @@
 Param (
-[Parameter(Mandatory=$True)]
+[Parameter(Mandatory=$True, HelpMessage='eg. "0-Preview123"')]
 [ValidateNotNull()]
 $versionSuffix)
 
