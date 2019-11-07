@@ -104,6 +104,11 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 				var result = ConvertToPatch(jTokenResult.Model, container, jsonMergePatchType, modelType, serializer);
 				return InputFormatterResult.Success(result);
 			}
+			catch (Exception ex)
+			{
+				context.ModelState.TryAddModelError(context.ModelName, ex.Message);
+				return await InputFormatterResult.FailureAsync();
+			}
 			finally
 			{
 				base.ReleaseJsonSerializer(serializer);
