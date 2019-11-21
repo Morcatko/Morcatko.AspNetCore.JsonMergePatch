@@ -1,6 +1,10 @@
-# JSON Merge Patch support for ASP.NET Core 2.x
+# JSON Merge Patch support for ASP.NET Core
 
-![Nuget](https://img.shields.io/nuget/v/Morcatko.AspNetCore.JsonMergePatch.svg)
+
+[![Nuget](https://img.shields.io/nuget/v/Morcatko.AspNetCore.JsonMergePatch.svg)](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch) - [Morcatko.AspNetCore.JsonMergePatch](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch) (ASP.NET Core 2.x)  
+[![Nuget](https://img.shields.io/nuget/v/Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.svg)](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson) - [Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson) (ASP.NET Core 3.0)  
+[![Nuget](https://img.shields.io/nuget/v/Morcatko.AspNetCore.JsonMergePatch.SystemText.svg)](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.SystemText) - [Morcatko.AspNetCore.JsonMergePatch.SystemText](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.SystemText) (ASP.NET Core 3.0)  
+[![Nuget](https://img.shields.io/nuget/v/Morcatko.AspNetCore.JsonMergePatch.Document.svg)](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.Document) - [Morcatko.AspNetCore.JsonMergePatch.Document](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.Document) (ASP.NET Core 3.0 - base package)
 
 ### JSON Merge Patch
 - [RFC 7396](https://tools.ietf.org/html/rfc7396)
@@ -29,11 +33,13 @@ resulting C# object:
 }
 ```
 
+### How to (ASP.NET Core 3.0)
+See `2.1-testApp` or `3.0 testApp` for sample
+1. Install nuget.
+- ASP.NET Core 2.x [Morcatko.AspNetCore.JsonMergePatch](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch)
+- ASP.NET Core 3.0 (Newtonsoft.Json) [Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson)
+- ASP.NET Core 3.0 (System.Text) [Morcatko.AspNetCore.JsonMergePatch.SystemText](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.SystemText) nuget
 
-### How to
-See testApp2.0 for sample
-
-1. Install [Morcatko.AspNetCore.JsonMergePatch](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch) nuget
 2. Add to your startup class
 ```
 using Morcatko.AspNetCore.JsonMergePatch;
@@ -42,8 +48,10 @@ public void ConfigureServices(IServiceCollection services)
 {
     ...
     services
-        .AddMvc()              // or .AddMvcCore()
-        .AddJsonMergePatch();
+        .AddMvc()                         // or .AddMvcCore()
+        //.AddJsonMergePatch();           // 2.x
+        //.AddNewtonsoftJsonMergePatch(); // 3.0 (Newtonsoft.Josn)
+        //.AddSystemTextJsonMergePatch(); // 3.0 (System.Text)
     ...
 }
 ```
@@ -86,9 +94,10 @@ services.AddSwaggerGen(c =>
  * bool EnableDelete - Deletes items when target object is Dictionary and patched value is null
 
 ### How to - unit testing
-See `Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Json.Simple` class for more examples
+See tests in `...Builder.Json.Simple` class for more examples
 ```
 Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Json
+
 public void UnitTest()
 {
     var model = new Model();
