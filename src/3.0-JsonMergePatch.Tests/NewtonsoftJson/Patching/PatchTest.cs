@@ -5,8 +5,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Patching
 {
 	public class PatchTests
 	{
-		private TestModel GetTestModel() =>
-		   new TestModel()
+		private NewtonsoftTestModel GetTestModel() =>
+		   new NewtonsoftTestModel()
 		   {
 			   Integer = 5,
 			   String = "string",
@@ -23,10 +23,10 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Patching
 			   }
 		   };
 
-		private JsonMergePatchDocument<TestModel> GetTestPatch(object patchObject, JsonMergePatchOptions options = null)
-			=> PatchBuilder.Build<TestModel>(patchObject, options);
+		private JsonMergePatchDocument<NewtonsoftTestModel> GetTestPatch(object patchObject, JsonMergePatchOptions options = null)
+			=> PatchBuilder.Build<NewtonsoftTestModel>(patchObject, options);
 
-		private TestModel GetPatchedModel(object patchObject, TestModel model = null, JsonMergePatchOptions options = null)
+		private NewtonsoftTestModel GetPatchedModel(object patchObject, NewtonsoftTestModel model = null, JsonMergePatchOptions options = null)
 			=> GetTestPatch(patchObject, options).ApplyTo(model ?? GetTestModel());
 
 		[Fact]

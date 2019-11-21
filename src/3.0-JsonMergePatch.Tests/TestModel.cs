@@ -8,26 +8,28 @@ using System.Runtime.Serialization;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 {
-	public class TestModel : IEquatable<TestModel>
+	public class TestModelBase : IEquatable<TestModelBase>, IEquatable<NewtonsoftTestModel>, IEquatable<SystemTextTestModel>
 	{
 		public int Id { get; set; }
 		public int Integer { get; set; }
 		[Required]
 		public string String { get; set; }
-		public float Float { get; set; }
+		public virtual float Float { get; set; }
+
 		public bool Boolean { get; set; }
 
-		[JsonProperty("NewName")]
-		public string Renamed { get; set; }
+		public virtual string Renamed { get; set; }
 		public SubModel SubModel { get; set; }
 
 		public SimpleEnum SimpleEnum { get; set; }
-		[JsonConverter(typeof(StringEnumConverter))]
-		public ValueEnum ValueEnum { get; set; }
+
+		public virtual ValueEnum ValueEnum { get; set; }
 
 		public DateTimeOffset? Date { get; set; }
 
-		public bool Equals(TestModel other)
+		public Dictionary<string, SubModel> SubModels { get; set; } = new Dictionary<string, SubModel>();
+
+		public bool Equals(TestModelBase other)
 		{
 			//We are not comparing Id
 			return this.Integer == other.Integer
@@ -45,7 +47,21 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 					|| this.SubModel.Equals(other.SubModel));
 		}
 
-		public Dictionary<string, SubModel> SubModels { get; set; } = new Dictionary<string, SubModel>();
+		public bool Equals(NewtonsoftTestModel other) => Equals(other as TestModelBase);
+		public bool Equals(SystemTextTestModel other) => Equals(other as TestModelBase);
+	}
+
+	public class NewtonsoftTestModel : TestModelBase
+	{
+		[JsonProperty("NewName")]
+		public override string Renamed { get; set; }
+
+		[JsonConverter(typeof(StringEnumConverter))]
+		public override ValueEnum ValueEnum { get; set; }
+	}
+
+	public class SystemTextTestModel : TestModelBase
+	{
 	}
 
 	public class SubModel : IEquatable<SubModel>

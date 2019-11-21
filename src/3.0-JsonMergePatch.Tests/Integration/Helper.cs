@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Morcatko.AspNetCore.JsonMergePatch.SystemText;
 using Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server;
 using Newtonsoft.Json;
-using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,8 +34,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 								.AddNewtonsoftJson(ConfigureNewtonsoft)
 								.AddNewtonsoftJsonMergePatch();
 						else
-							throw new NotSupportedException();
-						//builder.AddSystemTextJsonMergePatch();
+							builder.AddSystemTextJsonMergePatch();
 					}
 					else
 					{
@@ -45,8 +44,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 								.AddNewtonsoftJson(ConfigureNewtonsoft)
 								.AddNewtonsoftJsonMergePatch();
 						else
-							throw new NotSupportedException();
-						//builder.AddSystemTextJsonMergePatch();
+							builder.AddSystemTextJsonMergePatch();
 					}
 				})
 				.UseStartup<Startup>());
@@ -66,8 +64,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 
 		public static Task<HttpResponseMessage> JsonPatchAsync(this TestServer server, string uri, object model) => server.CreateRequest(uri).And(r => r.Content = JsonPatchContent(model)).SendAsync("PATCH");
 		public static Task<HttpResponseMessage> MergePatchAsync(this TestServer server, string uri, object model) => server.CreateRequest(uri).And(r => r.Content = MergePatchContent(model)).SendAsync("PATCH");
-		public static Task<T> MergePatchAsync<T>(this TestServer server, string uri, object model) => Parse<T>(MergePatchAsync(server, uri, model));
 		public static Task<HttpResponseMessage> PostAsync(this TestServer server, string uri, object model) => server.CreateRequest(uri).And(r => r.Content = JsonContent(model)).SendAsync("POST");
+
+		public static Task<T> MergePatchAsync<T>(this TestServer server, string uri, object model) => Parse<T>(MergePatchAsync(server, uri, model));
 		public static Task<T> GetAsync<T>(this TestServer server, string uri) => Parse<T>(server.CreateRequest(uri).SendAsync("GET"));
 	}
 }

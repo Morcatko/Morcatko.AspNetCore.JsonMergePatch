@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\3.0-JsonMergePatch.NewtonsoftJson\3.0-JsonMergePatch.NewtonsoftJson.csproj" />
+    <ProjectReference Include="..\3.0-JsonMergePatch.SystemText\3.0-JsonMergePatch.SystemText.csproj" />
   </ItemGroup>
 
 </Project>

@@ -76,20 +76,6 @@ namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson
 
 		public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
 		{
-			var jsonMergePatchType = context.ModelType;
-			var container = (IList)null;
-
-			if (ContainerIsIEnumerable(context))
-			{
-				jsonMergePatchType = context.ModelType.GenericTypeArguments[0];
-				var listType = typeof(List<>);
-				var constructedListType = listType.MakeGenericType(jsonMergePatchType);
-				container = (IList)Activator.CreateInstance(constructedListType);
-			}
-			var modelType = jsonMergePatchType.GenericTypeArguments[0];
-
-
-
 			var patchContext = new InputFormatterContext(
 				context.HttpContext,
 				context.ModelName,
@@ -98,15 +84,27 @@ namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson
 				context.ReaderFactory,
 				context.TreatEmptyInputAsDefaultValue);
 
-			var jTokenResult = await base.ReadRequestBodyAsync(patchContext);
+			var jsonResult = await base.ReadRequestBodyAsync(patchContext);
 
-			if (jTokenResult.HasError)
-				return jTokenResult;
+			if (jsonResult.HasError)
+				return jsonResult;
 
 			var serializer = base.CreateJsonSerializer();
 			try
 			{
-				var result = ConvertToPatch(jTokenResult.Model, container, jsonMergePatchType, modelType, serializer);
+				var jsonMergePatchType = context.ModelType;
+				var container = (IList)null;
+
+				if (ContainerIsIEnumerable(context))
+				{
+					jsonMergePatchType = context.ModelType.GenericTypeArguments[0];
+					var listType = typeof(List<>);
+					var constructedListType = listType.MakeGenericType(jsonMergePatchType);
+					container = (IList)Activator.CreateInstance(constructedListType);
+				}
+				var modelType = jsonMergePatchType.GenericTypeArguments[0];
+
+				var result = ConvertToPatch(jsonResult.Model, container, jsonMergePatchType, modelType, serializer);
 				return InputFormatterResult.Success(result);
 			}
 			catch (Exception ex)

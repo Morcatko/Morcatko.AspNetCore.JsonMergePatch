@@ -7,7 +7,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
 	{
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddSingleton<IRepository, Repository>();
+			services.AddSingleton<IRepository<NewtonsoftTestModel>, Repository<NewtonsoftTestModel>>();
+			services.AddSingleton<IRepository<SystemTextTestModel>, Repository<SystemTextTestModel>>();
 		}
 
 		public void Configure(IApplicationBuilder app)

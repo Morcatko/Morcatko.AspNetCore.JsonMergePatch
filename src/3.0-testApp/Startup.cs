@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Morcatko.AspNetCore.JsonMergePatch;
+using Morcatko.AspNetCore.JsonMergePatch.Tests;
 using Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server;
 
 namespace testApp
@@ -13,7 +14,8 @@ namespace testApp
 				.AddControllers()
 				.AddNewtonsoftJsonMergePatch();
 
-			services.AddSingleton<IRepository, Repository>();
+			services.AddSingleton<IRepository<NewtonsoftTestModel>, Repository<NewtonsoftTestModel>>();
+			services.AddSingleton<IRepository<SystemTextTestModel>, Repository<SystemTextTestModel>>();
 
 			/*services.AddSwaggerGen(c =>
 			{
