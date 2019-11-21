@@ -34,15 +34,15 @@ namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson
 			_jsonMergePatchOptions = jsonMergePatchOptions ?? throw new ArgumentNullException(nameof(jsonMergePatchOptions));
 		}
 
-		public void Configure(MvcOptions options)
+		public void Configure(MvcOptions mvcOptions)
 		{
 			var jsonMergePatchLogger = _loggerFactory.CreateLogger<NewtonsoftJsonMergePatchInputFormatter>();
-			options.InputFormatters.Insert(0, new NewtonsoftJsonMergePatchInputFormatter(
+			mvcOptions.InputFormatters.Insert(0, new NewtonsoftJsonMergePatchInputFormatter(
 				jsonMergePatchLogger,
 				_jsonOptions.Value.SerializerSettings,
 				_charPool,
 				_objectPoolProvider,
-				options,
+				mvcOptions,
 				_jsonOptions.Value,
 				_modelMetadataProvider,
 				_jsonMergePatchOptions.Value));

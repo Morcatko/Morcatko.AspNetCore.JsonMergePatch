@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.Net.Http.Headers;
-using Morcatko.AspNetCore.JsonMergePatch.external;
 using Morcatko.AspNetCore.JsonMergePatch.Internal;
 using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders;
 using Newtonsoft.Json;
@@ -14,11 +12,7 @@ using System;
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson
@@ -29,7 +23,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson
 		private static readonly MediaTypeHeaderValue JsonMergePatchMediaType = MediaTypeHeaderValue.Parse(JsonMergePatchDocument.ContentType).CopyAsReadOnly();
 		private readonly Lazy<ModelMetadata> _modelMetadata;
 		private readonly JsonMergePatchOptions _jsonMergePatchOptions;
-		
+
 		public NewtonsoftJsonMergePatchInputFormatter(
 			ILogger logger,
 			JsonSerializerSettings serializerSettings,

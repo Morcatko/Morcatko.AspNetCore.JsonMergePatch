@@ -12,7 +12,6 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Configuration
 	class JsonMergePatchOptionsSetup : IConfigureOptions<MvcOptions>
 	{
 		private readonly ILoggerFactory _loggerFactory;
-		private readonly IOptions<MvcOptions> _mvcOptions;
 		private readonly IOptions<MvcJsonOptions> _mvcJsonOptions;
 		private readonly Lazy<IModelMetadataProvider> _modelMetadataProvider;
 		private readonly ArrayPool<char> _charPool;
@@ -21,7 +20,6 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Configuration
 
 		public JsonMergePatchOptionsSetup(
 			ILoggerFactory loggerFactory,
-			IOptions<MvcOptions> mvcOptions,
 			IOptions<MvcJsonOptions> mvcJsonOptions,
 			Lazy<IModelMetadataProvider> modelMetadataProvider,
 			ArrayPool<char> charPool,
@@ -29,7 +27,6 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Configuration
 			IOptions<JsonMergePatchOptions> jsonMergePatchOptions)
 		{
 			_loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-			_mvcOptions = mvcOptions ?? throw new ArgumentNullException(nameof(mvcOptions));
 			_mvcJsonOptions = mvcJsonOptions ?? throw new ArgumentNullException(nameof(mvcJsonOptions));
 			_modelMetadataProvider = modelMetadataProvider ?? throw new ArgumentNullException(nameof(loggerFactory));
 			_charPool = charPool ?? throw new ArgumentNullException(nameof(charPool));
@@ -37,14 +34,14 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Configuration
 			_jsonMergePatchOptions = jsonMergePatchOptions ?? throw new ArgumentNullException(nameof(jsonMergePatchOptions));
 		}
 
-		public void Configure(MvcOptions options)
+		public void Configure(MvcOptions mvcOption)
 		{
-			options.InputFormatters.Insert(0, new JsonMergePatchInputFormatter(
+			mvcOption.InputFormatters.Insert(0, new JsonMergePatchInputFormatter(
 				_loggerFactory.CreateLogger<JsonMergePatchInputFormatter>(),
 				_mvcJsonOptions.Value.SerializerSettings,
 				_charPool,
 				_objectPoolProvider,
-				_mvcOptions.Value,
+				mvcOption,
 				_mvcJsonOptions.Value,
 				_modelMetadataProvider,
 				_jsonMergePatchOptions.Value));
