@@ -33,7 +33,7 @@ resulting C# object:
 }
 ```
 
-### How to (ASP.NET Core 3.0)
+### How to
 See `2.1-testApp` or `3.0 testApp` for sample
 1. Install nuget.
 - ASP.NET Core 2.x [Morcatko.AspNetCore.JsonMergePatch](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch)
