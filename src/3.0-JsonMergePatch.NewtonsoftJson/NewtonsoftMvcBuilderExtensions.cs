@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -14,6 +15,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 			services.AddOptions();
 			services.Configure(configure ?? (a => { }));
 			services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, NewtonsoftJsonMergePatchOptionsSetup>());
+			services.AddSingleton<Lazy<IModelMetadataProvider>>(sp => new Lazy<IModelMetadataProvider>(() => sp.GetRequiredService<IModelMetadataProvider>()));
 		}
 
 		public static IMvcBuilder AddNewtonsoftJsonMergePatch(this IMvcBuilder builder, Action<JsonMergePatchOptions> configure = null)

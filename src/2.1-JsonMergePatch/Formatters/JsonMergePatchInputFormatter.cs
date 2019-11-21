@@ -29,9 +29,11 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 			JsonSerializerSettings serializerSettings,
 			ArrayPool<char> charPool,
 			ObjectPoolProvider objectPoolProvider,
+			MvcOptions mvcOptions,
+			MvcJsonOptions mvcJsonOptions,
 			Lazy<IModelMetadataProvider> lazyModelMetadataProvider,
 			JsonMergePatchOptions jsonMergePatchOptions)
-			: base(logger, serializerSettings, charPool, objectPoolProvider)
+			: base(logger, serializerSettings, charPool, objectPoolProvider, mvcOptions, mvcJsonOptions)
 		{
 			SupportedMediaTypes.Clear();
 			SupportedMediaTypes.Add(JsonMergePatchMediaType);
@@ -108,7 +110,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Formatters
 			catch (Exception ex)
 			{
 				context.ModelState.TryAddModelError(context.ModelName, ex.Message);
-				return await InputFormatterResult.FailureAsync();
+				return InputFormatterResult.Failure();
 			}
 			finally
 			{
