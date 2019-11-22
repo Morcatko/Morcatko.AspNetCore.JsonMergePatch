@@ -56,12 +56,14 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 		[JsonProperty("NewName")]
 		public override string Renamed { get; set; }
 
-		[JsonConverter(typeof(StringEnumConverter))]
+		[Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
 		public override ValueEnum ValueEnum { get; set; }
 	}
 
 	public class SystemTextTestModel : TestModelBase
 	{
+		//[JsonPropertyName("NewName")]
+		public override string Renamed { get; set; }
 	}
 
 	public class SubModel : IEquatable<SubModel>

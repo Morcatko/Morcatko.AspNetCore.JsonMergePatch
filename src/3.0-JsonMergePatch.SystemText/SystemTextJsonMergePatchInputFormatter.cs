@@ -106,8 +106,6 @@ namespace Morcatko.AspNetCore.JsonMergePatch.SystemText
 				context.ModelState.TryAddModelError(context.ModelName, ex.Message);
 				return InputFormatterResult.Failure();
 			}
-
-			return jsonResult;
 		}
 
 	}

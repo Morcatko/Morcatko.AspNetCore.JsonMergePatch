@@ -1,8 +1,6 @@
 ﻿using Morcatko.AspNetCore.JsonMergePatch.Internal;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.SystemText.Builders
@@ -61,7 +59,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.SystemText.Builders
 		internal static IInternalJsonMergePatchDocument CreatePatchDocument(Type modelType, JsonElement jsonElement, JsonMergePatchOptions options)
 		{
 			var jsonMergePatchType = internalJsonMergePatchDocumentType.MakeGenericType(modelType);
-			var model = Activator.CreateInstance(modelType);//patchObject.ToObject(modelType, jsonSerializer);
+			var json = jsonElement.GetRawText();
+			var model = JsonSerializer.Deserialize(json, modelType);
 
 			var jsonMergePatchDocument = (IInternalJsonMergePatchDocument)Activator.CreateInstance(jsonMergePatchType, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { model }, null);
 			AddOperation(jsonMergePatchDocument, "/", jsonElement, options);
