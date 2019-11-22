@@ -6,14 +6,10 @@ using Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server;
 
 namespace testApp
 {
-	public class Startup
+	abstract class StartupBase
 	{
-		public void ConfigureServices(IServiceCollection services)
+		public virtual void ConfigureServices(IServiceCollection services)
 		{
-			services
-				.AddControllers()
-				.AddNewtonsoftJsonMergePatch();
-
 			services.AddSingleton<IRepository<NewtonsoftTestModel>, Repository<NewtonsoftTestModel>>();
 			services.AddSingleton<IRepository<SystemTextTestModel>, Repository<SystemTextTestModel>>();
 
@@ -33,6 +29,27 @@ namespace testApp
 
 			app.UseRouting();
 			app.UseEndpoints(e => e.MapControllers());
+		}
+	}
+
+	class Startup_Newtonsoft : StartupBase
+	{
+		public override void ConfigureServices(IServiceCollection services)
+		{
+			base.ConfigureServices(services);
+			services
+				.AddControllers()
+				.AddNewtonsoftJsonMergePatch();
+		}
+	}
+
+	class Startup_SystemText: StartupBase
+	{
+		public override void ConfigureServices(IServiceCollection services)
+		{
+			base.ConfigureServices(services);
+			services
+				.AddControllers();
 		}
 	}
 }

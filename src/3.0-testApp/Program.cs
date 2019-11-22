@@ -12,7 +12,7 @@ namespace testApp
 
 		public static IWebHost BuildWebHost(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
-				.UseStartup<Startup>()
+				.UseStartup<Startup_Newtonsoft>()
 				.Build();
 	}
 }
