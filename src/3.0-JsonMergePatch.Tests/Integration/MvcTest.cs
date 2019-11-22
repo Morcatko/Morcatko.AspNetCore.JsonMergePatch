@@ -45,8 +45,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 
 				await p.MergePatchAsync(null, new[]
 				{
-					new { Id = 1, Integer = 7 },
-					new { Id = 2, Integer = 9 }
+					new { id = 1, integer = 7 },
+					new { id = 2, integer = 9 }
 				});
 
 				var patchedModel = await p.GetAsync("0");
@@ -79,8 +79,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 
 				await p.MergePatchAsync(null, new[]
 				{
-					new { Id = 1, Date = dateTime },
-					new { Id = 2, Date = dateTime.AddDays(15) }
+					new { id = 1, date = dateTime },
+					new { id = 2, date = dateTime.AddDays(15) }
 				});
 
 				var patchedModel = await p.GetAsync("0");

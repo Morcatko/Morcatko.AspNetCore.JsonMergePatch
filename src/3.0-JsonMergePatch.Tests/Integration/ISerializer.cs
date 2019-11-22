@@ -17,10 +17,21 @@
 
 	class SystemTextSerializer : ISerializer
 	{
+		private readonly System.Text.Json.JsonSerializerOptions _options;
+
+		public SystemTextSerializer()
+		{
+			_options = new System.Text.Json.JsonSerializerOptions()
+			{
+				PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
+			};
+			_options.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverterWithAttributeSupport());
+		}
+
 		public T Deserialize<T>(string json)
-			=> System.Text.Json.JsonSerializer.Deserialize<T>(json, new System.Text.Json.JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+			=> System.Text.Json.JsonSerializer.Deserialize<T>(json, _options);
 
 		public string Serialize(object data)
-			=> System.Text.Json.JsonSerializer.Serialize(data, data.GetType());
+			=> System.Text.Json.JsonSerializer.Serialize(data, data.GetType(), _options);
 	}
 }

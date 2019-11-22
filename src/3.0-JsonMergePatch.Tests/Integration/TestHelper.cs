@@ -25,6 +25,11 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 				o.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
 			}
 
+			void ConfigureSystemText(JsonOptions o)
+			{
+				o.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverterWithAttributeSupport());
+			}
+
 			_newtonsoft = newtonsoft;
 			Serializer = newtonsoft
 				? (ISerializer)new NewtonsoftSerializer()
@@ -40,7 +45,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 								.AddNewtonsoftJson(ConfigureNewtonsoft)
 								.AddNewtonsoftJsonMergePatch();
 						else
-							builder.AddSystemTextJsonMergePatch();
+							builder
+								.AddJsonOptions(ConfigureSystemText)
+								.AddSystemTextJsonMergePatch();
 					}
 					else
 					{
@@ -50,7 +57,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 								.AddNewtonsoftJson(ConfigureNewtonsoft)
 								.AddNewtonsoftJsonMergePatch();
 						else
-							builder.AddSystemTextJsonMergePatch();
+							builder
+								.AddJsonOptions(ConfigureSystemText)
+								.AddSystemTextJsonMergePatch();
 					}
 				})
 				.UseStartup<Startup>());

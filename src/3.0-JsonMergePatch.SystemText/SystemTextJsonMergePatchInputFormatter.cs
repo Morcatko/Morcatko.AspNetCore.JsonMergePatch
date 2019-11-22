@@ -38,7 +38,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.SystemText
 
 		private IInternalJsonMergePatchDocument CreatePatchDocument(Type jsonMergePatchType, Type modelType, JsonElement jsonElement)
 		{
-			var jsonMergePatchDocument = PatchBuilder.CreatePatchDocument(modelType, jsonElement, this._jsonMergePatchOptions);
+			var jsonMergePatchDocument = PatchBuilder.CreatePatchDocument(modelType, jsonElement, base.SerializerOptions, this._jsonMergePatchOptions);
 			return jsonMergePatchDocument;
 		}
 

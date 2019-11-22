@@ -56,14 +56,14 @@ namespace Morcatko.AspNetCore.JsonMergePatch.SystemText.Builders
 		}
 
 		static readonly Type internalJsonMergePatchDocumentType = typeof(InternalJsonMergePatchDocument<>);
-		internal static IInternalJsonMergePatchDocument CreatePatchDocument(Type modelType, JsonElement jsonElement, JsonMergePatchOptions options)
+		internal static IInternalJsonMergePatchDocument CreatePatchDocument(Type modelType, JsonElement jsonElement, JsonSerializerOptions jsonOptions, JsonMergePatchOptions mergePatchOptions)
 		{
 			var jsonMergePatchType = internalJsonMergePatchDocumentType.MakeGenericType(modelType);
 			var json = jsonElement.GetRawText();
-			var model = JsonSerializer.Deserialize(json, modelType);
+			var model = JsonSerializer.Deserialize(json, modelType, jsonOptions);
 
 			var jsonMergePatchDocument = (IInternalJsonMergePatchDocument)Activator.CreateInstance(jsonMergePatchType, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { model }, null);
-			AddOperation(jsonMergePatchDocument, "/", jsonElement, options);
+			AddOperation(jsonMergePatchDocument, "/", jsonElement, mergePatchOptions);
 			return jsonMergePatchDocument;
 		}
 	}
