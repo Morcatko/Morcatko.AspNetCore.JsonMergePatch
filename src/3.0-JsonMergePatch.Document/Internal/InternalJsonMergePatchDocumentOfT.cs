@@ -6,7 +6,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Internal
 {
 	public interface IInternalJsonMergePatchDocument
 	{
-		public abstract IContractResolver ContractResolver { get; set; }
+		IContractResolver ContractResolver { get; set; }
 		void AddOperation_Replace(string path, object value);
 		void AddOperation_Remove(string path);
 		void AddOperation_Add(string path);
