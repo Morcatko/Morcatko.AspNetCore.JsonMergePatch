@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>testApp</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\2.1-JsonMergePatch.Tests\Integration\Server\DataController.cs" Link="Server\DataController.cs" />
+    <Compile Include="..\2.1-JsonMergePatch.Tests\Integration\Server\Repository.cs" Link="Server\Repository.cs" />
+    <Compile Include="..\2.1-JsonMergePatch.Tests\TestModel.cs" Link="Server\TestModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\2.1-JsonMergePatch\2.1-JsonMergePatch.csproj" />
+  </ItemGroup>
+
+</Project>
