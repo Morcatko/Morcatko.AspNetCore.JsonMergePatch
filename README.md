@@ -3,7 +3,7 @@
 
 [![Nuget](https://img.shields.io/nuget/v/Morcatko.AspNetCore.JsonMergePatch.svg)](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch) - [Morcatko.AspNetCore.JsonMergePatch](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch) (ASP.NET Core 2.x)  
 [![Nuget](https://img.shields.io/nuget/v/Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.svg)](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson) - [Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson) (ASP.NET Core 3.x)  
-[![Nuget](https://img.shields.io/nuget/v/Morcatko.AspNetCore.JsonMergePatch.SystemText.svg)](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.SystemText) - [Morcatko.AspNetCore.JsonMergePatch.SystemText](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.SystemText) (ASP.NET Core 3.x)
+[![Nuget](https://img.shields.io/nuget/v/Morcatko.AspNetCore.JsonMergePatch.SystemText.svg)](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.SystemText) - [Morcatko.AspNetCore.JsonMergePatch.SystemText](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.SystemText) (ASP.NET Core 3.x)  
 [![Nuget](https://img.shields.io/nuget/v/Morcatko.AspNetCore.JsonMergePatch.Document.svg)](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.Document) - [Morcatko.AspNetCore.JsonMergePatch.Document](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.Document) (ASP.NET Core 3.x - base package)
 
 ### JSON Merge Patch
