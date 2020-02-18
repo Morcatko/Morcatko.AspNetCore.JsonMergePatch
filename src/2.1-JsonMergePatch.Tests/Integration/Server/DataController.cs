@@ -44,7 +44,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
 		}
 
 		[HttpPatch]
-		[Route("{id}")]
+		[Route("{id}/full")]
 		[Consumes("application/json-patch+json")]
 		public TestModel FullPatch(int id, [FromBody] JsonPatchDocument<TestModel> patch)
 		{

@@ -43,7 +43,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
 		}
 
 		[HttpPatch]
-		[Route("{id}")]
+		[Route("{id}/full")]
 		[Consumes("application/json-patch+json")]
 		public T FullPatch(int id, [FromBody] JsonPatchDocument<T> patch)
 		{
@@ -85,9 +85,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
 		{ }
 	}
 	[Route("api/data/systemText")]
-	public class SystemTexttDataController : DataControllerBase<SystemTextTestModel>
+	public class SystemTextDataController : DataControllerBase<SystemTextTestModel>
 	{
-		public SystemTexttDataController(IRepository<SystemTextTestModel> repository)
+		public SystemTextDataController(IRepository<SystemTextTestModel> repository)
 			: base(repository)
 		{ }
 	}

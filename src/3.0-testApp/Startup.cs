@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Morcatko.AspNetCore.JsonMergePatch;
 using Morcatko.AspNetCore.JsonMergePatch.Tests;
 using Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server;
@@ -13,19 +14,22 @@ namespace testApp
 			services.AddSingleton<IRepository<NewtonsoftTestModel>, Repository<NewtonsoftTestModel>>();
 			services.AddSingleton<IRepository<SystemTextTestModel>, Repository<SystemTextTestModel>>();
 
-			/*services.AddSwaggerGen(c =>
-			{
-				c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
-			});*/
+			services
+				.AddSwaggerGen(c =>
+				{
+					c.SwaggerDoc("v1", new OpenApiInfo{ Title = "My API", Version = "v1" });
+					c.OperationFilter<JsonMergePatchDocumentOperationFilter>();
+				})
+				.AddSwaggerGenNewtonsoftSupport();
 		}
 
 		public void Configure(IApplicationBuilder app)
 		{
-			/*app.UseSwagger();
+			app.UseSwagger();
 			app.UseSwaggerUI(c =>
 			{
 				c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-			});*/
+			});
 
 			app.UseRouting();
 			app.UseEndpoints(e => e.MapControllers());

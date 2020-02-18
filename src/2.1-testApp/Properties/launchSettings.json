@@ -3,11 +3,11 @@
     "Kestrel": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:50814/swagger",
+      "launchUrl": "http://localhost:58762/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:50814"
+      "applicationUrl": "http://localhost:58762"
     }
   }
 }
