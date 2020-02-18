@@ -77,7 +77,9 @@ patch.ApplyTo(backendModel)
 
 4. Swagger config (optional)
 
-copy & paste this class into your app - https://github.com/Morcatko/Morcatko.AspNetCore.JsonMergePatch/blob/master/test/testApp2.0/JsonMergePatchDocumentOperationFilter.cs
+copy & paste this class into your app 
+ - 2.x - https://github.com/Morcatko/Morcatko.AspNetCore.JsonMergePatch/blob/master/src/2.1-testApp/JsonMergePatchDocumentOperationFilter.cs
+ - 3.x - https://github.com/Morcatko/Morcatko.AspNetCore.JsonMergePatch/blob/master/src/3.0-testApp/JsonMergePatchDocumentOperationFilter.cs
 ```
 services.AddSwaggerGen(c =>
     {
