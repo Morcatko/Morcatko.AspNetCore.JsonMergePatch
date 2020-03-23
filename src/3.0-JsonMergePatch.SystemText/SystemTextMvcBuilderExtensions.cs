@@ -4,8 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using System;
+using Morcatko.AspNetCore.JsonMergePatch.SystemText;
 
-namespace Morcatko.AspNetCore.JsonMergePatch.SystemText
+namespace Morcatko.AspNetCore.JsonMergePatch
 {
 	public static class SystemTextMvxBuilderExtensions
 	{
