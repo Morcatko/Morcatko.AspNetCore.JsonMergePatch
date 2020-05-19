@@ -23,7 +23,11 @@ namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders
 			=> Build<TModel>(DiffBuilder.Build(original, patched) ?? new JObject(), options);
 
 		public static JsonMergePatchDocument<TModel> Build<TModel>(string jsonObjectPatch, JsonSerializerSettings serializerSettings = null, JsonMergePatchOptions options = null) where TModel : class
-			=> Build<TModel>(JsonConvert.DeserializeObject<JObject>(jsonObjectPatch, serializerSettings), options);
+			=> CreatePatchDocument<TModel>(
+				JsonConvert.DeserializeObject<JObject>(jsonObjectPatch, serializerSettings),
+				serializerSettings != null ? JsonSerializer.Create(serializerSettings) : defaultSerializer,
+				options ?? new JsonMergePatchOptions()
+			);
 
 		public static JsonMergePatchDocument<TModel> Build<TModel>(object jsonObjectPatch, JsonMergePatchOptions options = null) where TModel : class
 			=> Build<TModel>(JObject.FromObject(jsonObjectPatch), options);
