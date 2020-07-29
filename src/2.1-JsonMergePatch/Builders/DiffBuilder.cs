@@ -1,10 +1,10 @@
+using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Builders
 {
-    public static class DiffBuilder
+	public static class DiffBuilder
 	{
 		public static JObject Build<TModel>(TModel original, TModel patched) where TModel : class
 			=> Build(JObject.FromObject(original), JObject.FromObject(patched));
