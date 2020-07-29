@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders
 {
-	public static class DiffBuilder
+    public static class DiffBuilder
 	{
 		public static JObject Build<TModel>(TModel original, TModel patched) where TModel : class
 			=> Build(JObject.FromObject(original), JObject.FromObject(patched));
@@ -42,10 +42,11 @@ namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders
 		private static JToken BuildObjectDiff(JObject original, JObject patched)
 		{
 			JObject result = new JObject();
-			var properties = original?.Properties() ?? patched.Properties();
-			foreach (var property in properties)
+			var propertyNames = original.Properties()
+				.Union(patched.Properties())
+				.Select(p => p.Name).Distinct();
+			foreach (var propertyName in propertyNames)
 			{
-				var propertyName = property.Name;
 				var originalJToken = original?.GetValue(propertyName);
 				var patchedJToken = patched?.GetValue(propertyName);
 
