@@ -42,10 +42,11 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Builders
 		private static JToken BuildObjectDiff(JObject original, JObject patched)
 		{
 			JObject result = new JObject();
-			var properties = original?.Properties() ?? patched.Properties();
-			foreach (var property in properties)
+			var propertyNames = original.Properties()
+				.Union(patched.Properties())
+				.Select(p => p.Name).Distinct();
+			foreach (var propertyName in propertyNames)
 			{
-				var propertyName = property.Name;
 				var originalJToken = original?.GetValue(propertyName);
 				var patchedJToken = patched?.GetValue(propertyName);
 
