@@ -72,7 +72,7 @@ You can apply a patch to a different Type (be carefull, all C# static typing is 
 ```
 BackendModel backendModel;
 JsonMergePatch<DtoModel> patch;
-patch.ApplyTo(backendModel)
+patch.ApplyToT(backendModel)
 ```
 
 4. Swagger config (optional)
