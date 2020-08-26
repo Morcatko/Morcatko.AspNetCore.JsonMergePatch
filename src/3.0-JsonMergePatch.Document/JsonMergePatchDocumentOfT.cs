@@ -54,7 +54,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch
 			return objectToApplyTo;
 		}
 
-		public TOtherModel ApplyTo<TOtherModel>(TOtherModel objectToApplyTo) where TOtherModel : class
+		public TOtherModel ApplyToT<TOtherModel>(TOtherModel objectToApplyTo) where TOtherModel : class
 		{
 			this.ClearAddOperation(objectToApplyTo);
 

@@ -23,7 +23,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Patching
 			var model2 = new Model2 { Integer = 3 };
 			var patch1 = PatchBuilder.Build<Model1>(new { Integer = 5 });
 
-			patch1.ApplyTo(model2);
+			patch1.ApplyToT(model2);
 
 			Assert.Equal(5, model2.Integer);
 
