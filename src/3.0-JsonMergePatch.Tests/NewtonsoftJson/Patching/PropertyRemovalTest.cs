@@ -20,7 +20,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Patching {
     // see https://github.com/RicoSuter/NSwag/issues/1991#issuecomment-518600843
     class DisallowNullContractResolver : DefaultContractResolver
     {
-        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        protected override Newtonsoft.Json.Serialization.JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             var jsonProp = base.CreateProperty(member, memberSerialization);
             if (jsonProp.Required == Required.DisallowNull)
