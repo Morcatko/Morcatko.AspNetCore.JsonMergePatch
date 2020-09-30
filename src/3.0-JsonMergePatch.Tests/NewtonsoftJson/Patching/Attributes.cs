@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Patching
 {
-	public class JsonProperty
+	public class Attributes
 	{
 		class ClassOne
 		{
