@@ -14,6 +14,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Internal
 		private static PropertyInfo GetPropertyInfo(Type type, string propertyName)
 			=> type.GetProperties().Single(property => property.Name.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
 
+		private static JsonProperty GetJsonProperty(JsonObjectContract jsonObjectContract, string propertyName)
+			 => jsonObjectContract.Properties.Single(p => p.PropertyName.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
+
 		internal static Type GetPropertyTypeFromPath(Type type, string path, IContractResolver contractResolver)
 		{
 			var currentType = type;
@@ -25,8 +28,12 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Internal
 					currentType = jsonDictionaryContract.DictionaryValueType;
 					continue;
 				}
-				var currentProperty = GetPropertyInfo(currentType, propertyName);
-				currentType = currentProperty.PropertyType;
+				if (jsonContract is JsonObjectContract jsonObjectContract)
+				{
+					currentType = GetJsonProperty(jsonObjectContract, propertyName).PropertyType;
+					continue;
+				}
+				currentType = GetPropertyInfo(currentType, propertyName).PropertyType;
 			}
 			return currentType;
 		}
@@ -56,7 +63,10 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Internal
 				{
 					return false;
 				}
-
+			}
+			else if (jsonContract is JsonObjectContract jsonObjectContract)
+			{
+				currentValue = GetJsonProperty(jsonObjectContract, currentPath).ValueProvider.GetValue(value);
 			}
 			else
 			{
