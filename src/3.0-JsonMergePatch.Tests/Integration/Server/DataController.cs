@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
 {
-	public class DataControllerBase<T> : Controller where T: TestModelBase
+	public class DataControllerBase<T> : Controller where T : TestModelBase
 	{
 		private readonly IRepository<T> _repository;
 
@@ -23,7 +23,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
 
 		[HttpPost]
 		[Route("{id}")]
-		public T Post(int id, [FromBody]T model)
+		public T Post(int id, [FromBody] T model)
 		{
 			model.Id = id;
 			_repository[id] = model;
@@ -81,7 +81,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration.Server
 	public class NewtonsoftDataController : DataControllerBase<NewtonsoftTestModel>
 	{
 		public NewtonsoftDataController(IRepository<NewtonsoftTestModel> repository)
-			:base(repository)
+			: base(repository)
 		{ }
 	}
 	[Route("api/data/systemText")]

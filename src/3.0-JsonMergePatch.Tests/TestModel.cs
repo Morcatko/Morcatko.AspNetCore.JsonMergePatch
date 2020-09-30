@@ -27,6 +27,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 
 		public DateTimeOffset? Date { get; set; }
 
+		public decimal? NullableDecimal { get; set; }
+
 		public Dictionary<string, SubModel> SubModels { get; set; } = new Dictionary<string, SubModel>();
 
 		public bool Equals(TestModelBase other)
@@ -39,6 +41,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 				&& this.Renamed == other.Renamed
 				&& this.SimpleEnum == other.SimpleEnum
 				&& this.ValueEnum == other.ValueEnum
+				&& this.NullableDecimal == other.NullableDecimal
 				&& this.Date == other.Date
 				&& this.Date.GetValueOrDefault().Offset == other.Date.GetValueOrDefault().Offset
 				&& Enumerable.SequenceEqual(this.SubModels?.Keys, other.SubModels?.Keys)
