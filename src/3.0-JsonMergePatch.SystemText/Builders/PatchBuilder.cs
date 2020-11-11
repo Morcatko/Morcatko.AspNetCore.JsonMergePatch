@@ -13,7 +13,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.SystemText.Builders
 			{
 				case JsonValueKind.Null: return null;
 				case JsonValueKind.String: return jsonElement.GetString();
-				case JsonValueKind.Number: return jsonElement.GetInt64();
+				case JsonValueKind.Number: return jsonElement.GetGenericNumber();
 				case JsonValueKind.True: return true;
 				case JsonValueKind.False: return false;
 				case JsonValueKind.Undefined:
@@ -22,6 +22,17 @@ namespace Morcatko.AspNetCore.JsonMergePatch.SystemText.Builders
 				default:
 					throw new NotSupportedException($"Unsupported ValueKind - {jsonElement.ValueKind}");
 			}
+		}
+
+		private static object GetGenericNumber (this JsonElement jsonElement)
+        {
+
+            // Attempt to parse the JSON Element as an Int32 first
+            if (jsonElement.TryGetInt32(out int int32)) return int32;
+
+            // Failing that, parse it as a Decimal instead
+            return jsonElement.GetDecimal();
+
 		}
 
 		private static bool IsValue(this JsonValueKind valueKind)
