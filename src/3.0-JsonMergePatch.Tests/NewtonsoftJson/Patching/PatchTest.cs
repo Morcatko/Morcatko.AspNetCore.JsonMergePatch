@@ -75,15 +75,6 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Patching
 		}
 
 		[Fact]
-		public void PatchDictionnaryAddKeyWithSlash()
-		{
-			var patchString = @"{ ""SubModels"": {""te/st"": {} } }";
-			JsonMergePatchDocument<TestModelBase> patch = PatchBuilder.Build<TestModelBase>(patchString);
-			TestModelBase patchedModel = patch.ApplyTo(GetTestModel());
-			Assert.Equal("te/st", patchedModel.SubModels.First().Key);
-		}
-
-		[Fact]
 		public void PatchDictionnaryEditProperty()
 		{
 			var model = GetTestModel();
