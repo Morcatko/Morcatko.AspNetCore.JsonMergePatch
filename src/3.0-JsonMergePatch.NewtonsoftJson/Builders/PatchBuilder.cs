@@ -44,7 +44,9 @@ namespace Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders
 		{
 			foreach (var jProperty in patchObject)
 			{
-				var path = pathPrefix + jProperty.Key;
+				// Encode any possible "/" in the path. Ref: https://tools.ietf.org/html/rfc6901#section-3
+				var path = pathPrefix + jProperty.Key.Replace("/", "~1");
+
 				if (jProperty.Value is JValue jValue)
 				{
 					if (options.EnableDelete && jValue.Value == null)

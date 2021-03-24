@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Builders.Json
@@ -14,6 +16,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Builders.Json
 			public int Integer { get; set; } = 1;
 			public string String { get; set; } = "abc";
 			public DateTimeOffset Date { get; set; } = new DateTimeOffset(2019, 10, 29, 9, 38, 0, 0, TimeSpan.FromHours(2));
+			public Dictionary<string, object> Dic { get; set; } = new Dictionary<string, object>();
 		}
 
 		private readonly PatchBuilder<SimpleClass> builder = new PatchBuilder<SimpleClass>();
@@ -27,6 +30,17 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Builders.Json
 			var result = patch.ApplyTo(original);
 
 			Assert.Equal(3, result.Integer);
+		}
+
+		[Fact]
+		public void DictionaryAddKeyWithSlash()
+		{
+			var original = new SimpleClass();
+
+			var patch = builder.Build("{ \"Dic\": { \"key/1\": {} }");
+			var result = patch.ApplyTo(original);
+
+			Assert.Equal("key/1", result.Dic.First().Key);
 		}
 
 		[Fact]

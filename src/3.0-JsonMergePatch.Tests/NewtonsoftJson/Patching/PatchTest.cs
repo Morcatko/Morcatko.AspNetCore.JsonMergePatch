@@ -1,4 +1,5 @@
 ﻿using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders;
+using System.Linq;
 using Xunit;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.Tests.NewtonsoftJson.Patching
