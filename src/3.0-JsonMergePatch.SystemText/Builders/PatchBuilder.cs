@@ -1,5 +1,6 @@
 ﻿using Morcatko.AspNetCore.JsonMergePatch.Internal;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
@@ -14,25 +15,23 @@ namespace Morcatko.AspNetCore.JsonMergePatch.SystemText.Builders
 				case JsonValueKind.Null: return null;
 				case JsonValueKind.String: return jsonElement.GetString();
 				case JsonValueKind.Number: return jsonElement.GetGenericNumber();
+				case JsonValueKind.Array: return jsonElement.EnumerateArray().Select(j => j.ToObject()).ToArray();
 				case JsonValueKind.True: return true;
 				case JsonValueKind.False: return false;
 				case JsonValueKind.Undefined:
 				case JsonValueKind.Object:
-				case JsonValueKind.Array:
 				default:
 					throw new NotSupportedException($"Unsupported ValueKind - {jsonElement.ValueKind}");
 			}
 		}
 
-		private static object GetGenericNumber (this JsonElement jsonElement)
-        {
+		private static object GetGenericNumber(this JsonElement jsonElement)
+		{
+			// Attempt to parse the JSON Element as an Int32 first
+			if (jsonElement.TryGetInt32(out int int32)) return int32;
 
-            // Attempt to parse the JSON Element as an Int32 first
-            if (jsonElement.TryGetInt32(out int int32)) return int32;
-
-            // Failing that, parse it as a Decimal instead
-            return jsonElement.GetDecimal();
-
+			// Failing that, parse it as a Decimal instead
+			return jsonElement.GetDecimal();
 		}
 
 		private static bool IsValue(this JsonValueKind valueKind)
