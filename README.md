@@ -103,7 +103,7 @@ Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Json
 public void UnitTest()
 {
     var model = new Model();
-    var patch1 = PatchBuidler.Build<Model>("{ integer: 1}");
+    var patch1 = PatchBuilder.Build<Model>("{ integer: 1}");
     ...
     or
     ...
