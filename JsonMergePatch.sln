@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29025.244
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1", "2.1", "{A64B8040-7F6B-4061-B099-53954179C85A}"
 EndProject
@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		dotnet-pack-2.ps1 = dotnet-pack-2.ps1
 		dotnet-pack-3.ps1 = dotnet-pack-3.ps1
+		dotnet-pack-6.ps1 = dotnet-pack-6.ps1
 		README.md = README.md
 		signing.snk = signing.snk
 	EndProjectSection
@@ -30,6 +31,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "3.0-JsonMergePatch.NewtonsoftJson", "src\3.0-JsonMergePatch.NewtonsoftJson\3.0-JsonMergePatch.NewtonsoftJson.csproj", "{B8AE0E4F-46CA-44C0-A974-BFBD47AC1F07}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "3.0-JsonMergePatch.SystemText", "src\3.0-JsonMergePatch.SystemText\3.0-JsonMergePatch.SystemText.csproj", "{AAB5A72B-918A-4571-ADDD-AE81A5A05C41}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "6.0-JsonMergePatch.Document", "src\6.0-JsonMergePatch.Document\6.0-JsonMergePatch.Document.csproj", "{5E1467CD-A6E6-410E-A095-BD387BF031D1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "6.0-JsonMergePatch.NewtonsoftJson", "src\6.0-JsonMergePatch.NewtonsoftJson\6.0-JsonMergePatch.NewtonsoftJson.csproj", "{390DBA49-5B2C-4D1A-A042-35A6B9C413EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "6.0-JsonMergePatch.SystemText", "src\6.0-JsonMergePatch.SystemText\6.0-JsonMergePatch.SystemText.csproj", "{FCC90AE1-14DF-43C1-A074-0D7B41C2175B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "6.0-testApp", "src\6.0-testApp\6.0-testApp.csproj", "{9B8E0BAD-70A0-4EF6-8F9B-589B5A96ADF1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6.0", "6.0", "{5D5B37BE-05C6-4E2E-ADE8-098E31D47EF5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "6.0-JsonMergePatch.Tests", "src\6.0-JsonMergePatch.Tests\6.0-JsonMergePatch.Tests.csproj", "{29B62543-DF8B-4EBB-89A8-BED9507B75A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +82,26 @@ Global
 		{AAB5A72B-918A-4571-ADDD-AE81A5A05C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAB5A72B-918A-4571-ADDD-AE81A5A05C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAB5A72B-918A-4571-ADDD-AE81A5A05C41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E1467CD-A6E6-410E-A095-BD387BF031D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E1467CD-A6E6-410E-A095-BD387BF031D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E1467CD-A6E6-410E-A095-BD387BF031D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E1467CD-A6E6-410E-A095-BD387BF031D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{390DBA49-5B2C-4D1A-A042-35A6B9C413EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{390DBA49-5B2C-4D1A-A042-35A6B9C413EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{390DBA49-5B2C-4D1A-A042-35A6B9C413EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{390DBA49-5B2C-4D1A-A042-35A6B9C413EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCC90AE1-14DF-43C1-A074-0D7B41C2175B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCC90AE1-14DF-43C1-A074-0D7B41C2175B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCC90AE1-14DF-43C1-A074-0D7B41C2175B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCC90AE1-14DF-43C1-A074-0D7B41C2175B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B8E0BAD-70A0-4EF6-8F9B-589B5A96ADF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B8E0BAD-70A0-4EF6-8F9B-589B5A96ADF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B8E0BAD-70A0-4EF6-8F9B-589B5A96ADF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B8E0BAD-70A0-4EF6-8F9B-589B5A96ADF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29B62543-DF8B-4EBB-89A8-BED9507B75A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29B62543-DF8B-4EBB-89A8-BED9507B75A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29B62543-DF8B-4EBB-89A8-BED9507B75A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29B62543-DF8B-4EBB-89A8-BED9507B75A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +115,11 @@ Global
 		{556641AE-3A25-4087-81A1-04D1165D97DF} = {45C8140C-AC7A-429F-8B2E-BD8574535B15}
 		{B8AE0E4F-46CA-44C0-A974-BFBD47AC1F07} = {45C8140C-AC7A-429F-8B2E-BD8574535B15}
 		{AAB5A72B-918A-4571-ADDD-AE81A5A05C41} = {45C8140C-AC7A-429F-8B2E-BD8574535B15}
+		{5E1467CD-A6E6-410E-A095-BD387BF031D1} = {5D5B37BE-05C6-4E2E-ADE8-098E31D47EF5}
+		{390DBA49-5B2C-4D1A-A042-35A6B9C413EC} = {5D5B37BE-05C6-4E2E-ADE8-098E31D47EF5}
+		{FCC90AE1-14DF-43C1-A074-0D7B41C2175B} = {5D5B37BE-05C6-4E2E-ADE8-098E31D47EF5}
+		{9B8E0BAD-70A0-4EF6-8F9B-589B5A96ADF1} = {5D5B37BE-05C6-4E2E-ADE8-098E31D47EF5}
+		{29B62543-DF8B-4EBB-89A8-BED9507B75A5} = {5D5B37BE-05C6-4E2E-ADE8-098E31D47EF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {835CDCD1-3A3F-4D33-9107-9F961EBDED17}

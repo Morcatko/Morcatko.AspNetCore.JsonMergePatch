@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>Morcatko.AspNetCore.JsonMergePatch.Document</AssemblyName>
+    <RootNamespace>Morcatko.AspNetCore.JsonMergePatch</RootNamespace>
+    <VersionSuffix Condition=" '$(VersionSuffix)'=='' ">0</VersionSuffix>
+
+    <PackageId>Morcatko.AspNetCore.JsonMergePatch.Document</PackageId>
+    <Title>JSON Merge Patch for ASP.NET Core 6.x (Base Package)</Title>
+    <PackageVersion>6.0.$(VersionSuffix)</PackageVersion>
+    <Authors>Ondrej Morsky</Authors>
+    <Description>JSON Merge Patch support for ASP.NET Core 6.X (Base Package)</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Copyright>Copyright 2022 (c). All rights reserved.</Copyright>
+    <PackageTags>ASP.NET Core;JSON Merge Patch;RFC 7396</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <!--Nuget source + SourceLink-->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\signing.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>
