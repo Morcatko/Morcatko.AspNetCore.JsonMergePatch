@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Morcatko.AspNetCore.JsonMergePatch.Tests</RootNamespace>
 
     <IsPackable>false</IsPackable>
@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageReference Include="EnumExtensions.System.Text.Json" Version="1.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <PrivateAssets>all</PrivateAssets>
@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\3.0-JsonMergePatch.NewtonsoftJson\3.0-JsonMergePatch.NewtonsoftJson.csproj" />
-    <ProjectReference Include="..\3.0-JsonMergePatch.SystemText\3.0-JsonMergePatch.SystemText.csproj" />
+    <ProjectReference Include="..\6.0-JsonMergePatch.NewtonsoftJson\6.0-JsonMergePatch.NewtonsoftJson.csproj" />
+    <ProjectReference Include="..\6.0-JsonMergePatch.SystemText\6.0-JsonMergePatch.SystemText.csproj" />
   </ItemGroup>
 
 </Project>
