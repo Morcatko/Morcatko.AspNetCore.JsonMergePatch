@@ -11,27 +11,30 @@
 - performs partial resource update similar to JSON Patch
 - Supports Swagger
 - netstandard 2.0
-```
+ 
 C# object:
+````csharp
 var backendModel = new Model()
 {
     Name = "James Bond"
     Age = "45"
     Weapon = "Gun"
 }
-
+````
 JSON Merge Patch:
-{
-    "Weapon": "Knife"
+````csharp
+ var mergePatch = new object() {
+   "Weapon": "Knife"
+ }
+````
+Resulting C# object:
+````csharp
+var newObject = new Model() {
+  Name = "James Bond"
+  Age = "45"
+  Weapon = "Knife"
 }
-
-resulting C# object:
-{
-    Name = "James Bond"
-    Age = "45"
-    Weapon = "Knife"
-}
-```
+````
 
 ### How to
 See `2.1-testApp`, `3.0 testApp` or `6.0/testApp` for sample
@@ -41,7 +44,7 @@ See `2.1-testApp`, `3.0 testApp` or `6.0/testApp` for sample
 - ASP.NET Core 3+ (System.Text) [Morcatko.AspNetCore.JsonMergePatch.SystemText](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch.SystemText) nuget
 
 2. Add to your startup class
-```
+````csharp
 using Morcatko.AspNetCore.JsonMergePatch;
 
 public void ConfigureServices(IServiceCollection services)
@@ -54,9 +57,9 @@ public void ConfigureServices(IServiceCollection services)
         //.AddSystemTextJsonMergePatch(); // 3+ (System.Text)
     ...
 }
-```
+````
 3. Use in your controller
-```
+````csharp
 using Morcatko.AspNetCore.JsonMergePatch;
 
 [HttpPatch]
@@ -67,37 +70,37 @@ public void Patch([FromBody] JsonMergePatchDocument<Model> patch)
     patch.ApplyTo(backendModel);
     ...
 }
-```
+````
 You can apply a patch to a different Type (be carefull, all C# static typing is ignored) - see [#16](https://github.com/Morcatko/Morcatko.AspNetCore.JsonMergePatch/issues/16) for more details.
-```
+````csharp
 BackendModel backendModel;
 JsonMergePatch<DtoModel> patch;
 patch.ApplyToT(backendModel)
-```
+````
 
 4. Swagger config (optional)
 
 copy & paste this class into your app 
  - 2.x - https://github.com/Morcatko/Morcatko.AspNetCore.JsonMergePatch/blob/master/src/2.1-testApp/JsonMergePatchDocumentOperationFilter.cs
  - 3+ - https://github.com/Morcatko/Morcatko.AspNetCore.JsonMergePatch/blob/master/src/6.0-testApp/JsonMergePatchDocumentOperationFilter.cs
-```
+````csharp
 services.AddSwaggerGen(c =>
     {
         c.OperationFilter<JsonMergePatchDocumentOperationFilter>();
     });
-```
+````
 
 ### Options
-```
-    services
-        .AddMvc()
-        .AddJsonMergePatch(o => ....)
-```
+````csharp
+services
+    .AddMvc()
+    .AddJsonMergePatch(o => ....)
+````
  * bool EnableDelete - Deletes items when target object is Dictionary and patched value is null
 
 ### How to - unit testing
 See tests in `...Builder.Json.Simple` class for more examples
-```
+````csharp
 Morcatko.AspNetCore.JsonMergePatch.Tests.Builder.Json
 
 public void UnitTest()
@@ -111,7 +114,7 @@ public void UnitTest()
     var patched = new Model() { Integer = 1};
     var patch2 = PatchBuilder.Build(original, patched);
 }
-```
+````
 
 ### Known issues/Not working
 - ModelState.IsValid is false when a required property is missing
