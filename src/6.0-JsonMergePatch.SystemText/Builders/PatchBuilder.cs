@@ -2,8 +2,6 @@
 using System;
 using System.Reflection;
 using System.Text.Json;
-using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders;
-using Newtonsoft.Json.Linq;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.SystemText.Builders
 {
@@ -12,7 +10,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.SystemText.Builders
 		public static JsonMergePatchDocument<TModel> Build(TModel original, TModel patched, JsonMergePatchOptions options = null)
 		{
 			var diff = DiffBuilder.Build(original, patched);
-			var jsonElement = diff != null ? JsonElementFromJObject(diff) : JsonDocument.Parse("{}").RootElement;
+			var jsonElement = diff != null ? diff.RootElement.Clone() : JsonDocument.Parse("{}").RootElement;
 			return PatchBuilder.CreatePatchDocument<TModel>(jsonElement, options);
 		}
 
@@ -32,13 +30,6 @@ namespace Morcatko.AspNetCore.JsonMergePatch.SystemText.Builders
 		public static JsonMergePatchDocument<TModel> Build(JsonElement jsonObjectPatch, JsonMergePatchOptions options = null)
 		{
 			return PatchBuilder.CreatePatchDocument<TModel>(jsonObjectPatch, options);
-		}
-
-		private static JsonElement JsonElementFromJObject(JObject jObject)
-		{
-			var jsonString = jObject.ToString();
-			using var doc = JsonDocument.Parse(jsonString);
-			return doc.RootElement.Clone();
 		}
 	}
 
