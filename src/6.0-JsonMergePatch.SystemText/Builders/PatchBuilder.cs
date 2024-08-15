@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.SystemText.Builders
 {
-	public class PatchBuilder<TModel> where TModel : class
+	public static class PatchBuilder<TModel> where TModel : class
 	{
 		public static JsonMergePatchDocument<TModel> Build(TModel original, TModel patched, JsonMergePatchOptions options = null)
 		{
