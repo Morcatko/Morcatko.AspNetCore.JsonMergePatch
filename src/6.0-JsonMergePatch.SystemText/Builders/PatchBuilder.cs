@@ -5,6 +5,34 @@ using System.Text.Json;
 
 namespace Morcatko.AspNetCore.JsonMergePatch.SystemText.Builders
 {
+	public static class PatchBuilder<TModel> where TModel : class
+	{
+		public static JsonMergePatchDocument<TModel> Build(TModel original, TModel patched, JsonMergePatchOptions options = null)
+		{
+			var diff = DiffBuilder.Build(original, patched);
+			var jsonElement = diff != null ? diff.RootElement.Clone() : JsonDocument.Parse("{}").RootElement;
+			return PatchBuilder.CreatePatchDocument<TModel>(jsonElement, options);
+		}
+
+		public static JsonMergePatchDocument<TModel> Build(string jsonObjectPatch, JsonSerializerOptions jsonOptions = null, JsonMergePatchOptions options = null)
+		{
+			var jsonElement = JsonDocument.Parse(jsonObjectPatch).RootElement;
+			return PatchBuilder.CreatePatchDocument<TModel>(jsonElement, jsonOptions ?? new JsonSerializerOptions(), options ?? new JsonMergePatchOptions());
+		}
+
+		public static JsonMergePatchDocument<TModel> Build(object jsonObjectPatch, JsonMergePatchOptions options = null)
+		{
+			var json = JsonSerializer.Serialize(jsonObjectPatch);
+			var jsonElement = JsonDocument.Parse(json).RootElement;
+			return PatchBuilder.CreatePatchDocument<TModel>(jsonElement, options);
+		}
+
+		public static JsonMergePatchDocument<TModel> Build(JsonElement jsonObjectPatch, JsonMergePatchOptions options = null)
+		{
+			return PatchBuilder.CreatePatchDocument<TModel>(jsonObjectPatch, options);
+		}
+	}
+
 	public static class PatchBuilder
 	{
 		private static object ToObject(this JsonElement jsonElement)
@@ -67,6 +95,17 @@ namespace Morcatko.AspNetCore.JsonMergePatch.SystemText.Builders
 		}
 
 		static readonly Type internalJsonMergePatchDocumentType = typeof(InternalJsonMergePatchDocument<>);
+
+		internal static JsonMergePatchDocument<TModel> CreatePatchDocument<TModel>(JsonElement patchObject, JsonMergePatchOptions options = null) where TModel : class
+		{
+			return CreatePatchDocument(typeof(TModel), patchObject, new JsonSerializerOptions(), options ?? new JsonMergePatchOptions()) as JsonMergePatchDocument<TModel>;
+		}
+
+		internal static JsonMergePatchDocument<TModel> CreatePatchDocument<TModel>(JsonElement patchObject, JsonSerializerOptions jsonOptions, JsonMergePatchOptions mergePatchOptions) where TModel : class
+		{
+			return CreatePatchDocument(typeof(TModel), patchObject, jsonOptions, mergePatchOptions) as JsonMergePatchDocument<TModel>;
+		}
+
 		internal static IInternalJsonMergePatchDocument CreatePatchDocument(Type modelType, JsonElement jsonElement, JsonSerializerOptions jsonOptions, JsonMergePatchOptions mergePatchOptions)
 		{
 			var jsonMergePatchType = internalJsonMergePatchDocumentType.MakeGenericType(modelType);
