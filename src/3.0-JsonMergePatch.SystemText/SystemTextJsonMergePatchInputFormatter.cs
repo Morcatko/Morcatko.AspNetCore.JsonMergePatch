@@ -34,7 +34,19 @@ namespace Morcatko.AspNetCore.JsonMergePatch.SystemText
 		}
 
 		private static bool ContainerIsIEnumerable(InputFormatterContext context)
-			=> context.ModelType.IsGenericType && (context.ModelType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+			=> GetEnumerableElementType(context.ModelType) != null;
+		private static Type GetEnumerableElementType(Type type)
+		{
+			if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
+				return type.GetGenericArguments()[0];
+			return null;
+		}
+		private static Type GetMergePatchDocumentModelType(Type type)
+		{
+			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(JsonMergePatchDocument<>))
+				return type.GetGenericArguments()[0];
+			return null;
+		}
 
 		private IInternalJsonMergePatchDocument CreatePatchDocument(Type jsonMergePatchType, Type modelType, JsonElement jsonElement)
 		{
@@ -65,6 +77,16 @@ namespace Morcatko.AspNetCore.JsonMergePatch.SystemText
 				default:
 					throw new NotSupportedException($"Unsupported ValueKing '{e.ValueKind}'");
 			}
+		}
+
+		public override IReadOnlyList<string> GetSupportedContentTypes(string contentType, Type objectType)
+		{
+			if (GetMergePatchDocumentModelType(objectType) != null ||
+				(GetEnumerableElementType(objectType) is Type elementType && GetMergePatchDocumentModelType(elementType) != null))
+			{
+				return base.GetSupportedContentTypes(contentType, objectType);
+			}
+			return Array.Empty<string>();
 		}
 
 		public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
