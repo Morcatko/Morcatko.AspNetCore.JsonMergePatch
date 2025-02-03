@@ -1,4 +1,4 @@
-# JSON Merge Patch support for ASP.NET Core 2, 3 and 5
+# JSON Merge Patch support for ASP.NET Core
 
 
 [![Nuget](https://img.shields.io/nuget/v/Morcatko.AspNetCore.JsonMergePatch.svg)](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch) - [Morcatko.AspNetCore.JsonMergePatch](https://www.nuget.org/packages/Morcatko.AspNetCore.JsonMergePatch) (ASP.NET Core 2.x)  
