@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Morcatko.AspNetCore.JsonMergePatch.SystemTextJson</AssemblyName>
     <RootNamespace>Morcatko.AspNetCore.JsonMergePatch.SystemTextJson</RootNamespace>
     <VersionSuffix Condition=" '$(VersionSuffix)'=='' ">0</VersionSuffix>
 
     <PackageId>Morcatko.AspNetCore.JsonMergePatch.SystemText</PackageId>
-    <Title>JSON Merge Patch for ASP.NET Core 3.x (System.Text.Json)</Title>
-    <PackageVersion>3.0.$(VersionSuffix)</PackageVersion>
+    <Title>JSON Merge Patch for ASP.NET Core 6.x (System.Text.Json)</Title>
+    <PackageVersion>6.0.$(VersionSuffix)</PackageVersion>
     <Authors>Ondrej Morsky</Authors>
-    <Description>JSON Merge Patch support for ASP.NET Core 3.X (System.Text.Json)</Description>
+    <Description>JSON Merge Patch support for ASP.NET Core 6.X (System.Text.Json)</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <Copyright>Copyright 2019 (c). All rights reserved.</Copyright>
+    <Copyright>Copyright 2022 (c). All rights reserved.</Copyright>
     <PackageTags>ASP.NET Core;JSON Merge Patch;RFC 7396;System.Text.Json</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
@@ -24,11 +24,16 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\signing.snk</AssemblyOriginatorKeyFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <ProjectReference Include="..\3.0-JsonMergePatch.Document\3.0-JsonMergePatch.Document.csproj" />
+    <ProjectReference Include="..\6.0-JsonMergePatch.Document\6.0-JsonMergePatch.Document.csproj" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
   
