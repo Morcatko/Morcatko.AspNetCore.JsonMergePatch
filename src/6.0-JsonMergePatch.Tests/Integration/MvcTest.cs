@@ -123,7 +123,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 		[MemberData(nameof(GetCombinations))]
 		public async Task NullableDecimalFloatingPoint(bool core, bool newtonsoft)
 		{
-			using (var p = new TestHelper(core, newtonsoft)) {
+			using (var p = new TestHelper(core, newtonsoft))
+			{
 				await p.PostAsync("0", p.GetTestModel());
 				await p.PostAsync("1", p.GetTestModel());
 
@@ -135,7 +136,27 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests.Integration
 
 				var patchedModel = await p.GetAsync("0");
 				var expected = p.GetTestModel();
-				expected.NullableDecimal = (decimal?) 7.5;
+				expected.NullableDecimal = (decimal?)7.5;
+				Assert.Equal(expected, patchedModel);
+			}
+		}
+
+		[Theory]
+		[MemberData(nameof(GetCombinations))]
+		public async Task Arrays(bool core, bool newtonsoft)
+		{
+			using (var p = new TestHelper(core, newtonsoft))
+			{
+				await p.PostAsync("0", p.GetTestModel());
+
+				await p.MergePatchAsync(null, new[]
+				{
+					new { id = 0, ArrayOfFloats = new [] { 7, 3.5f }}
+				});
+
+				var patchedModel = await p.GetAsync("0");
+				var expected = p.GetTestModel();
+				expected.ArrayOfFloats = new[] { 7, 3.5f };
 				Assert.Equal(expected, patchedModel);
 			}
 		}

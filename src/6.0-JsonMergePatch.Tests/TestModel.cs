@@ -29,6 +29,8 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 
 		public decimal? NullableDecimal { get; set; }
 
+		public float[] ArrayOfFloats { get; set; } = new float[0];
+
 		public Dictionary<string, SubModel> SubModels { get; set; } = new Dictionary<string, SubModel>();
 
 		public bool Equals(TestModelBase other)
@@ -44,6 +46,7 @@ namespace Morcatko.AspNetCore.JsonMergePatch.Tests
 				&& this.NullableDecimal == other.NullableDecimal
 				&& this.Date == other.Date
 				&& this.Date.GetValueOrDefault().Offset == other.Date.GetValueOrDefault().Offset
+				&& Enumerable.SequenceEqual(this.ArrayOfFloats, other.ArrayOfFloats)
 				&& Enumerable.SequenceEqual(this.SubModels?.Keys, other.SubModels?.Keys)
 				&& Enumerable.SequenceEqual(this.SubModels?.Values, other.SubModels?.Values)
 				&& ((this.SubModel == other.SubModel)
